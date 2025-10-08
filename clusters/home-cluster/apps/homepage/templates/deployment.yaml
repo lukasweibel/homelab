@@ -14,6 +14,7 @@ spec:
       labels:
         {{- include "homepage.selectorLabels" . | nindent 8 }}
       annotations:
+        # still trigger rollout when configmap changes
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ include "homepage.serviceAccountName" . }}
@@ -24,34 +25,32 @@ spec:
           ports:
             - name: http
               containerPort: 3000
-          # ensure the app can write logs without touching the ConfigMap
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh","-c","mkdir -p {{ .Values.config.mountPath }}/logs || true"]
           volumeMounts:
-            - name: config
-              mountPath: {{ .Values.config.mountPath }}   # e.g. /app/config
+            # 1) Writable config directory
+            - name: config-writable
+              mountPath: {{ .Values.config.mountPath }}               # /app/config
+
+            # 2) Overlay the three config files as file mounts (read-only)
+            - name: config-files
+              mountPath: {{ .Values.config.mountPath }}/settings.yaml
+              subPath: settings.yaml
               readOnly: true
-            - name: logs                                  # <-- NEW
-              mountPath: {{ .Values.config.mountPath }}/logs
+            - name: config-files
+              mountPath: {{ .Values.config.mountPath }}/widgets.yaml
+              subPath: widgets.yaml
+              readOnly: true
+            - name: config-files
+              mountPath: {{ .Values.config.mountPath }}/services.yaml
+              subPath: services.yaml
+              readOnly: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        - name: config
+        # Holds the writable directory
+        - name: config-writable
+          emptyDir: {}
+
+        # Provides your three files
+        - name: config-files
           configMap:
             name: {{ include "homepage.fullname" . }}-config
-        - name: logs                                      # <-- NEW
-          emptyDir: {}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
