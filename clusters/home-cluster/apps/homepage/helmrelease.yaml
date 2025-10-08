@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       # Path to your chart, relative to the GitRepository root that Flux bootstrapped
-      chart: apps/homepage
+      chart: ./clusters/home-cluster/apps/homepage
       sourceRef:
         kind: GitRepository
         name: flux-system
