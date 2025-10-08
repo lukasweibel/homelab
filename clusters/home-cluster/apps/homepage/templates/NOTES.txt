@@ -1,0 +1,9 @@
+Homepage is deploying.
+
+Service:
+  kubectl -n {{ .Release.Namespace }} get svc {{ include "homepage.fullname" . }}
+
+Port-forward (no ingress):
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "homepage.fullname" . }} 3000:{{ .Values.service.port }}
+
+If you enabled RBAC + ServiceAccount, Kubernetes widgets should work read-only.

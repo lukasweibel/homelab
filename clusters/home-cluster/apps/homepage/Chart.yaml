@@ -1,0 +1,10 @@
+apiVersion: v2
+name: homepage
+description: A minimal Helm chart for gethomepage/homepage
+type: application
+version: 0.1.0 # chart version (your packaging version)
+appVersion: "v0.9.12" # app version (container tag you want)
+kubeVersion: ">=1.23.0-0"
+home: https://gethomepage.dev
+sources:
+  - https://github.com/gethomepage/homepage
