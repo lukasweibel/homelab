@@ -50,32 +50,8 @@ config:
           disk: /
           uptime: true
 
-      - kubernetes:
-          cluster:
-            show: true
-            cpu: true
-            memory: true
-          nodes:
-            show: true
-            cpu: true
-            memory: true
-          resources:
-            show: true
-          persistentVolumes:
-            show: false
-
     services.yaml: |
       - Networking:
           - Pi-Hole:
               href: http://192.168.1.49/admin/
               description: DNS Blocker
-
-    kubernetes.yaml: |
-      kubernetes:
-        # Use in-cluster API with this pod's ServiceAccount
-        mode: cluster
-        cluster:
-          name: "home-k3s"
-        # namespaces:
-        #   - default
-        #   - kube-system
