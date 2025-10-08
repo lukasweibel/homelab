@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "homepage.fullname" . }}
-  labels:
-    {{- include "homepage.labels" . | nindent 4 }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type | quote }}
   selector:
-    {{- include "homepage.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
     - name: http
       port: {{ .Values.service.port }}
