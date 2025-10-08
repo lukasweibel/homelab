@@ -1,0 +1,54 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: pihole
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: pihole
+      version: 2.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: mojo2600
+        namespace: flux-system
+  install:
+    createNamespace: false
+  values:
+    # ---- Core settings (mirrors official container envs) ----
+    TZ: "Europe/Zurich"
+    DNS1: "1.1.1.1"
+    DNS2: "9.9.9.9"
+    # Use a Secret for the web password
+    existingSecret: "pihole-secret"
+    # Optional: conditional forwarding to your router (uncomment & adjust)
+    # REV_SERVER: "true"
+    # REV_SERVER_TARGET: "192.168.1.1"
+    # REV_SERVER_CIDR: "192.168.1.0/24"
+
+    # ---- Persistence ----
+    persistentVolumeClaim:
+      enabled: true
+      size: 1Gi
+      accessModes:
+        - ReadWriteOnce
+
+    # ---- Services (k3s ServiceLB exposes these on your node IP) ----
+    serviceWeb:
+      type: LoadBalancer
+      # Set a fixed port if you want (default 80); ServiceLB usually maps 80→80.
+      # loadBalancerIP: ""  # optional; ignored by k3s ServiceLB
+    serviceDns:
+      type: LoadBalancer
+      externalTrafficPolicy: Local   # preserves client IPs
+      # k3s ServiceLB will expose UDP/TCP 53 from the node(s)
+
+    # ---- Resources (light footprint) ----
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
