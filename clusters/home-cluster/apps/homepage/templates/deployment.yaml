@@ -24,16 +24,25 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+          # ensure the app can write logs without touching the ConfigMap
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh","-c","mkdir -p {{ .Values.config.mountPath }}/logs || true"]
           volumeMounts:
             - name: config
-              mountPath: {{ .Values.config.mountPath }}
+              mountPath: {{ .Values.config.mountPath }}   # e.g. /app/config
               readOnly: true
+            - name: logs                                  # <-- NEW
+              mountPath: {{ .Values.config.mountPath }}/logs
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: config
           configMap:
             name: {{ include "homepage.fullname" . }}-config
+        - name: logs                                      # <-- NEW
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
