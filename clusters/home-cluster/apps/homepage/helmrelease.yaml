@@ -7,7 +7,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # Path to your chart, relative to the GitRepository root that Flux bootstrapped
       chart: ./clusters/home-cluster/apps/homepage
       sourceRef:
         kind: GitRepository
