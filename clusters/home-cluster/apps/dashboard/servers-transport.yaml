@@ -1,0 +1,10 @@
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: kubernetes-dashboard-transport
+  namespace: kubernetes-dashboard
+spec:
+  # Kong presents CN=localhost
+  serverName: localhost
+  # Keep this while testing; you can remove later
+  insecureSkipVerify: true
