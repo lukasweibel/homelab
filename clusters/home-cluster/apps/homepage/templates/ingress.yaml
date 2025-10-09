@@ -1,20 +1,33 @@
-ingress:
-  enabled: true
-  className: traefik
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "homepage.fullname" . }}
+  labels:
+    {{- include "homepage.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-to-https@kubernetescrd
-  hosts:
-    - host: homepage.local.lan
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: homepage
-              port:
-                number: 3000
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className | quote }}
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ .path | quote }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ include "homepage.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
+        {{- end }}
+  {{- end }}
+  {{- with .Values.ingress.tls }}
   tls:
-    - secretName: homepage-tls
-      hosts:
-        - homepage.local.lan
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

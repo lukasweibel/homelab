@@ -26,11 +26,8 @@ spec:
             - name: http
               containerPort: 3000
           volumeMounts:
-            # 1) Writable config directory
             - name: config-writable
-              mountPath: {{ .Values.config.mountPath }}               # /app/config
-
-            # 2) Overlay the three config files as file mounts (read-only)
+              mountPath: {{ .Values.config.mountPath }}
             - name: config-files
               mountPath: {{ .Values.config.mountPath }}/settings.yaml
               subPath: settings.yaml
