@@ -5,4 +5,5 @@ resources:
   - helmrelease.yaml
   - admin-user.yaml
   - ns.yaml
+  - servers-transport.yaml 
   - ingress.yaml
