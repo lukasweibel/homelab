@@ -27,27 +27,33 @@ spec:
       size: 1Gi
       accessModes: [ReadWriteOnce]
 
-    # --- Custom hosts via ConfigMap mount ---
+    # These get written into pihole.toml -> custom.list, but Pi-hole overwrites on restart.
+    # We'll keep them for pihole/pihole.homepage, but rely on dnsmasq.d for test + future
+    customDnsEntries:
+      - "192.168.1.49 homepage.local.lan"
+      - "192.168.1.49 pihole.local.lan"
+      - "192.168.1.49 test.local.lan"
+
+    # Mount our own dnsmasq.d snippet so changes are always picked up
     extraVolumes:
-      - name: custom-hosts
+      - name: custom-dnsmasq
         configMap:
-          name: pihole-custom-hosts
+          name: pihole-custom-dnsmasq
 
     extraVolumeMounts:
-      - name: custom-hosts
-        mountPath: /etc/pihole/hosts/custom.list
-        subPath: custom.list
+      - name: custom-dnsmasq
+        mountPath: /etc/dnsmasq.d/02-custom.conf
+        subPath: 02-custom.conf
 
+    # Force a rollout when config changes
     podAnnotations:
-      redeploy-timestamp: "2025-10-09T20:45:00Z"
+      redeploy-timestamp: "2025-10-09T20:55:00Z"
 
     # --- Networking ---
-    # Expose ONLY DNS via ServiceLB (outside the cluster)
     serviceDns:
       type: LoadBalancer
       externalTrafficPolicy: Local
 
-    # Web UI inside cluster; Traefik will route to it
     serviceWeb:
       type: ClusterIP
       http:
@@ -56,7 +62,6 @@ spec:
       https:
         enabled: false
 
-    # Ingress schema expected by the chart (hosts as strings)
     ingress:
       enabled: true
       ingressClassName: traefik
@@ -66,9 +71,8 @@ spec:
         - pihole.local.lan
       path: /
       pathType: Prefix
-      tls: []  # add a secret here later if you want HTTPS
+      tls: []
 
-    # Resources (unchanged)
     resources:
       requests:
         cpu: 50m
