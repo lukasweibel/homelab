@@ -4,6 +4,5 @@ metadata:
   name: kubernetes-dashboard-transport
   namespace: kubernetes-dashboard
 spec:
+  serverName: localhost
   insecureSkipVerify: true
-  # or prefer verification:
-  # serverName: kubernetes-dashboard
