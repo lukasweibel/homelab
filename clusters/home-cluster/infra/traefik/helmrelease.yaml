@@ -1,0 +1,57 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      version: 29.0.0          # you can bump to latest 29.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  install:
+    createNamespace: true
+  values:
+    deployment:
+      replicas: 1
+
+    ingressClass:
+      enabled: true
+      isDefaultClass: false
+      name: traefik
+
+    service:
+      type: LoadBalancer
+      spec:
+        externalTrafficPolicy: Local
+
+    ports:
+      web:
+        port: 80
+        expose: true
+        exposedPort: 80
+        protocol: TCP
+      websecure:
+        port: 443
+        expose: true
+        exposedPort: 443
+        protocol: TCP
+
+    logs:
+      general:
+        level: INFO
+      access:
+        enabled: true
+
+    metrics:
+      prometheus:
+        enabled: false
+
+    providers:
+      kubernetesIngress:
+        publishedService:
+          enabled: true

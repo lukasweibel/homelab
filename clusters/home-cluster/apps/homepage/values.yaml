@@ -16,12 +16,11 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-# SA + RBAC for K8s widget
 rbac:
   create: true
 serviceAccount:
   create: true
-  name: homepage    # <-- set a name
+  name: homepage
 
 config:
   mountPath: /app/config
