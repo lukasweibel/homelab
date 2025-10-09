@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: pihole
-      version: 2.x.x
+      version: 2.34.0
       sourceRef:
         kind: HelmRepository
         name: mojo2600
@@ -37,6 +37,7 @@ spec:
       type: LoadBalancer
       externalTrafficPolicy: Local
 
+    # Web UI inside cluster; Traefik will route to it
     serviceWeb:
       type: ClusterIP
       http:
@@ -45,17 +46,17 @@ spec:
       https:
         enabled: false
 
+    # Ingress schema expected by the chart (hosts as strings)
     ingress:
       enabled: true
-      className: traefik
+      ingressClassName: traefik
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: web
       hosts:
-        - host: pihole.local.lan
-          paths:
-            - path: /
-              pathType: Prefix
-      tls: []               # add a secret here later if you want HTTPS
+        - pihole.local.lan
+      path: /
+      pathType: Prefix
+      tls: []  # add a secret here later if you want HTTPS
 
     # Resources (unchanged)
     resources:
