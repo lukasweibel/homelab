@@ -4,9 +4,14 @@ metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - k3s.local.lan
+      secretName: dashboard-tls   # self-signed or real cert (we’ll create below)
   rules:
     - host: k3s.local.lan
       http:

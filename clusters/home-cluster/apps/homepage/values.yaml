@@ -48,6 +48,10 @@ config:
           disk: /
           uptime: true
     services.yaml: |
+      - Cluster
+          - k3s Dashboard
+              href: http://k3s.local.lan/
+              description: UI for k3s
       - Networking:
           - Pi-Hole:
               href: http://pihole.local.lan/admin/
