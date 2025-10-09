@@ -3,24 +3,27 @@ image:
   tag: v0.9.12
   pullPolicy: IfNotPresent
 
-fullnameOverride: homepage        # <<< make all names "homepage"
+fullnameOverride: homepage
 replicaCount: 1
 
 service:
-  type: ClusterIP                 # <<< NodePort not needed with Ingress
+  type: ClusterIP
   port: 3000
 
 ingress:
   enabled: true
   className: traefik
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: web     # use "websecure" + tls below if you want HTTPS
   hosts:
     - host: homepage.local.lan
       paths:
         - path: /
           pathType: Prefix
-  tls: []
+  tls: []  # e.g.:
+  # tls:
+  #   - hosts: [homepage.local.lan]
+  #     secretName: homepage-tls
 
 resources: {}
 nodeSelector: {}
@@ -40,6 +43,7 @@ config:
       title: "My Homelab"
       theme: dark
       headerStyle: clean
+
     widgets.yaml: |
       - resources:
           cpu: true
@@ -47,13 +51,15 @@ config:
           cputype: true
           disk: /
           uptime: true
+
     services.yaml: |
-      - Cluster
-          - k3s Dashboard
+      - Cluster:
+          - "k3s Dashboard":
               href: https://k3s.local.lan/
               description: UI for k3s
+              icon: kubernetes
       - Networking:
-          - Pi-Hole:
+          - "Pi-hole":
               href: http://pihole.local.lan/admin/
               description: DNS Blocker
               icon: pi-hole
