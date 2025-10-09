@@ -3,16 +3,16 @@ image:
   tag: v0.9.12
   pullPolicy: IfNotPresent
 
+fullnameOverride: homepage        # <<< make all names "homepage"
 replicaCount: 1
 
 service:
-  type: NodePort
+  type: ClusterIP                 # <<< NodePort not needed with Ingress
   port: 3000
-  nodePort: 31469
 
 ingress:
   enabled: true
-  className: traefik                  # will map to spec.ingressClassName
+  className: traefik
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
   hosts:
@@ -20,10 +20,9 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-  tls: []   
+  tls: []
 
 resources: {}
-
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -41,7 +40,6 @@ config:
       title: "My Homelab"
       theme: dark
       headerStyle: clean
-
     widgets.yaml: |
       - resources:
           cpu: true
@@ -49,7 +47,6 @@ config:
           cputype: true
           disk: /
           uptime: true
-
     services.yaml: |
       - Networking:
           - Pi-Hole:
