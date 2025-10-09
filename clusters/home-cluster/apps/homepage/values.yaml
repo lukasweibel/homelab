@@ -10,17 +10,6 @@ service:
   port: 3000
   nodePort: 31469
 
-ingress:
-  enabled: true
-  className: ""
-  annotations: {}
-  hosts:
-    - host: homepage.local.lan
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
-
 resources: {}
 
 nodeSelector: {}
