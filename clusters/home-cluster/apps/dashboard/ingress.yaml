@@ -1,3 +1,4 @@
+# clusters/home-cluster/apps/dashboard/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,9 +7,6 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/service.serversscheme: https
-    # namespace/name of the ServersTransport:
-    traefik.ingress.kubernetes.io/service.serverstransport: kubernetes-dashboard/dashboard-insecure
 spec:
   ingressClassName: traefik
   tls:
@@ -23,7 +21,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                # route through Kong’s HTTPS proxy
-                name: kubernetes-dashboard-kong-proxy
+                # forward HTTP to the web service on 8000
+                name: kubernetes-dashboard-web
                 port:
-                  number: 443
+                  number: 8000
