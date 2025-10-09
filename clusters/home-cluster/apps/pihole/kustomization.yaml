@@ -4,3 +4,4 @@ resources:
   - ns.yaml
   - release.yaml
   - repo.yaml
+  - custom-dns.yaml
