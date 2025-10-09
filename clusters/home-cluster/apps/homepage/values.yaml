@@ -11,7 +11,7 @@ service:
   nodePort: 31469
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations: {}
   hosts:
