@@ -2,7 +2,7 @@ apiVersion: v2
 name: homepage
 description: A minimal Helm chart for gethomepage/homepage
 type: application
-version: 0.2.8
+version: 0.2.9
 appVersion: "v0.9.12"
 kubeVersion: ">=1.23.0-0"
 home: https://gethomepage.dev
