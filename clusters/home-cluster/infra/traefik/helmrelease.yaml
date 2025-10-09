@@ -14,8 +14,14 @@ spec:
         kind: HelmRepository
         name: traefik
         namespace: flux-system
+
+  # 👇 make Helm Controller install & update CRDs shipped by the chart
   install:
+    crds: Create
     createNamespace: false
+  upgrade:
+    crds: Create
+
   values:
     ingressClass:
       enabled: true
@@ -31,17 +37,20 @@ spec:
       web:
         port: 80
         expose:
-          default: true        # <-- FIX: was `true`
+          default: true
         exposedPort: 80
         protocol: TCP
       websecure:
         port: 443
         expose:
-          default: true        # <-- FIX: was `true`
+          default: true
         exposedPort: 443
         protocol: TCP
 
     providers:
+      # 👇 ensure Traefik watches its CRDs (incl. ServersTransport)
+      kubernetesCRD:
+        enabled: true
       kubernetesIngress:
         publishedService:
           enabled: true
