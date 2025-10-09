@@ -1,4 +1,3 @@
-# clusters/home-cluster/apps/dashboard/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,12 +6,13 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+    traefik.ingress.kubernetes.io/service.serverstransport: kubernetes-dashboard-transport
 spec:
   ingressClassName: traefik
   tls:
-    - hosts:
-        - k3s.local.lan
-      secretName: dashboard-tls
+    - hosts: [k3s.local.lan]
+      secretName: dashboard-tls   # your cert for k3s.local.lan
   rules:
     - host: k3s.local.lan
       http:
@@ -21,7 +21,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                # forward HTTP to the web service on 8000
-                name: kubernetes-dashboard-web
+                # IMPORTANT: use the Kong proxy service, not "-web"
+                name: kubernetes-dashboard-kong-proxy
                 port:
-                  number: 8000
+                  number: 443

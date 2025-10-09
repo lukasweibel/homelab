@@ -1,9 +1,10 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: ServersTransport
 metadata:
-  name: dashboard-insecure
+  name: kubernetes-dashboard-transport
   namespace: kubernetes-dashboard
 spec:
+  # Quickest way to get it working:
   insecureSkipVerify: true
-  # (optional) set SNI if you want
-  # serverName: kubernetes-dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local
+  # If you prefer verification, use:
+  # serverName: kubernetes-dashboard
