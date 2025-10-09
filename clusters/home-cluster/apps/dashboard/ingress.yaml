@@ -1,7 +1,7 @@
 apiVersion: traefik.io/v1alpha1
 kind: TraefikService
 metadata:
-  name: dashboard-proxy
+  name: dashboard-kong
   namespace: kubernetes-dashboard
 spec:
   weighted:
@@ -20,10 +20,17 @@ spec:
   entryPoints:
     - websecure
   tls:
-    secretName: dashboard-tls  # cert for k3s.local.lan
+    secretName: dashboard-tls
   routes:
+    # All API calls must go to Kong (JSON)
+    - match: Host(`k3s.local.lan`) && PathPrefix(`/api`)
+      kind: Rule
+      services:
+        - name: dashboard-kong
+          kind: TraefikService
+    # Everything else (the UI) goes to the web service (HTML)
     - match: Host(`k3s.local.lan`) && PathPrefix(`/`)
       kind: Rule
       services:
-        - name: dashboard-proxy
-          kind: TraefikService
+        - name: kubernetes-dashboard-web
+          port: 8000

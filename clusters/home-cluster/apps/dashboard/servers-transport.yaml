@@ -4,7 +4,6 @@ metadata:
   name: kubernetes-dashboard-transport
   namespace: kubernetes-dashboard
 spec:
-  # Kong presents CN=localhost
+  # Kong presents a self-signed cert with CN=localhost
   serverName: localhost
-  # Keep this while testing; you can remove later
   insecureSkipVerify: true
