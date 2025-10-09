@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - ./infra/traefik
   - ./apps/homepage
-  - ./apps/pihole 
+  - ./apps/pihole
+  - ./apps/dashboard  

@@ -1,0 +1,40 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kubernetes-dashboard
+      version: 7.5.0        # any current 7.x is fine
+      sourceRef:
+        kind: HelmRepository
+        name: kubernetes-dashboard
+        namespace: flux-system
+  install:
+    createNamespace: true
+
+  values:
+    metricsScraper:
+      enabled: true
+
+    service:
+      type: ClusterIP
+
+    # Ingress through Traefik
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: web
+      hosts:
+        - k3s.local.lan       # << change if you want a different hostname
+      paths:
+        - /
+      tls: []                 # add a secret here later if you want HTTPS
+
+    # optional: clean labels
+    extraLabels:
+      app.kubernetes.io/part-of: kubernetes-dashboard
