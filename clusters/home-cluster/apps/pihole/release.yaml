@@ -28,9 +28,9 @@ spec:
       accessModes: [ReadWriteOnce]
     
     customDnsEntries:
-      - "address=/homepage.local.lan/192.168.1.49"
-      - "address=/pihole.local.lan/192.168.1.49"
-      - "address=/test.local.lan/192.168.1.49"
+      - "192.168.1.49 homepage.local.lan"
+      - "192.168.1.49 pihole.local.lan"
+      - "192.168.1.49 test.local.lan"
 
 
     # --- Networking ---
