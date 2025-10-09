@@ -30,10 +30,11 @@ spec:
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: web
       hosts:
-        - k3s.local.lan       # << change if you want a different hostname
-      paths:
-        - /
-      tls: []                 # add a secret here later if you want HTTPS
+        - host: k3s.local.lan
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
 
     # optional: clean labels
     extraLabels:
