@@ -26,6 +26,10 @@ spec:
       enabled: true
       size: 1Gi
       accessModes: [ReadWriteOnce]
+    
+    customDnsEntries:
+      - "homepage.local.lan=192.168.1.49"
+      - "pihole.local.lan=192.168.1.49"
 
     # --- Networking ---
     # Expose ONLY DNS via ServiceLB (outside the cluster)
@@ -33,16 +37,14 @@ spec:
       type: LoadBalancer
       externalTrafficPolicy: Local
 
-    # Keep the Web UI internal (ClusterIP) to avoid port 80 conflict with Traefik
     serviceWeb:
       type: ClusterIP
       http:
         enabled: true
-        port: 8080          # <- internal service port (any free port is fine)
+        port: 8080
       https:
         enabled: false
 
-    # Route the Web UI through Traefik on port 80/443 via Ingress
     ingress:
       enabled: true
       className: traefik
