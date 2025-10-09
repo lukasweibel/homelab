@@ -1,32 +1,29 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: TraefikService
+metadata:
+  name: dashboard-proxy
+  namespace: kubernetes-dashboard
+spec:
+  weighted:
+    services:
+      - name: kubernetes-dashboard-kong-proxy
+        port: 443
+        scheme: https
+        serversTransport: kubernetes-dashboard-transport
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
-
-    # 👇 This is the important one for Ingress → use HTTPS to the Service
-    traefik.ingress.kubernetes.io/backend-protocol: "HTTPS"
-
-    # 👇 Attach the transport from the same namespace (no prefix needed)
-    traefik.ingress.kubernetes.io/service.serverstransport: kubernetes-dashboard-transport@kubernetescrd
 spec:
-  ingressClassName: traefik
+  entryPoints:
+    - websecure
   tls:
-    - hosts:
-        - k3s.local.lan
-      secretName: dashboard-tls
-  rules:
-    - host: k3s.local.lan
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                # Route to the Kong proxy, not "-web"
-                name: kubernetes-dashboard-kong-proxy
-                port:
-                  number: 443
+    secretName: dashboard-tls  # cert for k3s.local.lan
+  routes:
+    - match: Host(`k3s.local.lan`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: dashboard-proxy
+          kind: TraefikService
