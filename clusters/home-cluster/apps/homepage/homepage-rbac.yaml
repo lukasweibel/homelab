@@ -9,7 +9,6 @@ kind: ClusterRole
 metadata:
   name: homepage-readonly
 rules:
-  # core/resources your widget may read
   - apiGroups: [""]
     resources: ["namespaces","nodes","pods","services","endpoints","events"]
     verbs: ["get","list","watch"]
@@ -22,7 +21,7 @@ rules:
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses","ingressclasses","networkpolicies"]
     verbs: ["get","list","watch"]
-  - apiGroups: ["metrics.k8s.io"]
+  - apiGroups: ["metrics.k8s.io"]      # << required for the widget
     resources: ["nodes","pods"]
     verbs: ["get","list","watch"]
 ---

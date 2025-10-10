@@ -31,9 +31,9 @@ tolerations: []
 affinity: {}
 
 rbac:
-  create: true
+  create: false
 serviceAccount:
-  create: true
+  create: false
   name: homepage
 
 config:
