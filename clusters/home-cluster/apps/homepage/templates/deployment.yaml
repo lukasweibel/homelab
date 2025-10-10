@@ -33,6 +33,10 @@ spec:
               subPath: settings.yaml
               readOnly: true
             - name: config-files
+              mountPath: {{ .Values.config.mountPath }}/kubernetes.yaml
+              subPath: kubernetes.yaml
+              readOnly: true
+            - name: config-files
               mountPath: {{ .Values.config.mountPath }}/widgets.yaml
               subPath: widgets.yaml
               readOnly: true
