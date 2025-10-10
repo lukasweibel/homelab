@@ -1,15 +1,15 @@
-# homepage-rbac.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: homepage
-  namespace: default
+  namespace: homepage
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: homepage-readonly
 rules:
+  # core/resources your widget may read
   - apiGroups: [""]
     resources: ["namespaces","nodes","pods","services","endpoints","events"]
     verbs: ["get","list","watch"]
@@ -37,4 +37,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: homepage
-    namespace: default
+    namespace: homepage
