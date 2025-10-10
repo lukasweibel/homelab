@@ -56,10 +56,12 @@ config:
       - Cluster:
           - "k3s Dashboard":
               href: https://k3s.local.lan/
+              ping: k3s.local.lan
               description: UI for k3s
               icon: kubernetes
       - Networking:
           - "Pi-hole":
               href: http://pihole.local.lan/admin/
+              ping: pihole.local.lan
               description: DNS Blocker
               icon: pi-hole
