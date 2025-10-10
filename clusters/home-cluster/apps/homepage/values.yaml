@@ -51,12 +51,24 @@ config:
           cputype: true
           disk: /
           uptime: true
+      - kubernetes:
+          cluster:
+            show: true
+            cpu: true
+            memory: true
+            showLabel: true
+            label: "cluster"
+          nodes:
+            show: true
+            cpu: true
+            memory: true
+            showLabel: true
 
     services.yaml: |
       - Cluster:
           - "k3s Dashboard":
               href: https://k3s.local.lan/
-              siteMonitor: http://k3s.local.lan/
+              siteMonitor: https://k3s.local.lan/
               ping: k3s.local.lan
               description: UI for k3s
               icon: kubernetes
