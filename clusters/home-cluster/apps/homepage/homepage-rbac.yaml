@@ -21,7 +21,7 @@ rules:
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses","ingressclasses","networkpolicies"]
     verbs: ["get","list","watch"]
-  - apiGroups: ["metrics.k8s.io"]      # << required for the widget
+  - apiGroups: ["metrics.k8s.io"]
     resources: ["nodes","pods"]
     verbs: ["get","list","watch"]
 ---

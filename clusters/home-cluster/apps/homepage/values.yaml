@@ -39,6 +39,11 @@ serviceAccount:
 config:
   mountPath: /app/config
   files:
+    kubernetes.yaml: |
+      kubernetes:
+        mode: cluster
+        # optional:
+        # refreshSeconds: 15
     settings.yaml: |
       title: "My Homelab"
       theme: dark
