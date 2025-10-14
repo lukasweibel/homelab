@@ -24,14 +24,9 @@ spec:
           size: 1Gi
           accessModes: [ReadWriteOnce]
 
-        extraVolumes:
-          - name: custom-dnsmasq
-            configMap:
-              name: pihole-custom-dnsmasq
-        extraVolumeMounts:
-          - name: custom-dnsmasq
-            mountPath: /etc/dnsmasq.d/02-custom.conf
-            subPath: 02-custom.conf
+        extraVolumes: []
+        extraVolumeMounts: []
+
 
         podAnnotations:
           redeploy-timestamp: "2025-10-09T20:55:00Z"
