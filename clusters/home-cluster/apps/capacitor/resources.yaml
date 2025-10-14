@@ -46,4 +46,4 @@ spec:
               service:
                 name: capacitor
                 port:
-                  name: http
+                  number: 9000
