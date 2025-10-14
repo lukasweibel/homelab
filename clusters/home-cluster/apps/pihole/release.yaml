@@ -45,11 +45,9 @@ spec:
         mountPath: /etc/dnsmasq.d/02-custom.conf
         subPath: 02-custom.conf
 
-    # Force a rollout when config changes
     podAnnotations:
       redeploy-timestamp: "2025-10-09T20:55:00Z"
 
-    # --- Networking ---
     serviceDns:
       type: LoadBalancer
       externalTrafficPolicy: Local

@@ -14,16 +14,13 @@ ingress:
   enabled: true
   className: traefik
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web     # use "websecure" + tls below if you want HTTPS
+    traefik.ingress.kubernetes.io/router.entrypoints: web
   hosts:
     - host: homepage.local.lan
       paths:
         - path: /
           pathType: Prefix
-  tls: []  # e.g.:
-  # tls:
-  #   - hosts: [homepage.local.lan]
-  #     secretName: homepage-tls
+  tls: []
 
 resources: {}
 nodeSelector: {}

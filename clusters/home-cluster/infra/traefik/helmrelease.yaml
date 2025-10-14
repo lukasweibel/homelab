@@ -15,7 +15,6 @@ spec:
         name: traefik
         namespace: flux-system
 
-  # 👇 make Helm Controller install & update CRDs shipped by the chart
   install:
     crds: Create
     createNamespace: false
@@ -48,7 +47,6 @@ spec:
         protocol: TCP
 
     providers:
-      # 👇 ensure Traefik watches its CRDs (incl. ServersTransport)
       kubernetesCRD:
         enabled: true
       kubernetesIngress:

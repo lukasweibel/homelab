@@ -22,13 +22,11 @@ spec:
   tls:
     secretName: dashboard-tls
   routes:
-    # All API calls must go to Kong (JSON)
     - match: Host(`k3s.local.lan`) && PathPrefix(`/api`)
       kind: Rule
       services:
         - name: dashboard-kong
           kind: TraefikService
-    # Everything else (the UI) goes to the web service (HTML)
     - match: Host(`k3s.local.lan`) && PathPrefix(`/`)
       kind: Rule
       services:

@@ -26,3 +26,43 @@ spec:
   sourceRef:
     kind: OCIRepository
     name: capacitor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capacitor
+  namespace: flux-system
+  labels:
+    app: capacitor
+spec:
+  selector:
+    app: capacitor
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: capacitor
+  namespace: flux-system
+  labels:
+    app: capacitor
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: capacitor.local.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: capacitor
+                port:
+                  number: 80
+
