@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: argo-cd
+      version: 7.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: argo
+        namespace: flux-system
+  values:
+    server:
+      extraArgs:
+        - --insecure
+      service:
+        type: ClusterIP    # use Ingress/port-forward to reach it
+    # optional: create a simple Ingress via Traefik later if you want
