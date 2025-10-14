@@ -1,42 +1,88 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: OCIRepository
+apiVersion: v1
+kind: ServiceAccount
 metadata:
   name: capacitor
   namespace: flux-system
-spec:
-  interval: 12h
-  url: oci://ghcr.io/gimlet-io/capacitor-manifests
-  ref:
-    tag: v2025-09.2
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: capacitor-view
+subjects:
+  - kind: ServiceAccount
+    name: capacitor
+    namespace: flux-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view   # read-only access so the UI can list resources
+---
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: capacitor
   namespace: flux-system
+  labels:
+    app.kubernetes.io/name: capacitor
+    app.kubernetes.io/instance: capacitor
 spec:
-  targetNamespace: flux-system
-  interval: 1h
-  retryInterval: 2m
-  timeout: 5m
-  wait: true
-  prune: true
-  path: "./"
-  sourceRef:
-    kind: OCIRepository
-    name: capacitor
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: capacitor
+      app.kubernetes.io/instance: capacitor
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: capacitor
+        app.kubernetes.io/instance: capacitor
+    spec:
+      serviceAccountName: capacitor
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+      containers:
+        - name: capacitor
+          image: ghcr.io/gimlet-io/capacitor:v2025-09.2
+          ports:
+            - containerPort: 9000
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+          startupProbe:
+            httpGet:
+              path: /
+              port: 9000
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9000
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9000
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: capacitor-direct
+  name: capacitor
   namespace: flux-system
 spec:
   type: ClusterIP
   selector:
+    app.kubernetes.io/name: capacitor
     app.kubernetes.io/instance: capacitor
-    app.kubernetes.io/name: onechart
   ports:
     - name: http
       port: 9000
@@ -48,7 +94,7 @@ metadata:
   name: capacitor
   namespace: flux-system
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web   # or websecure + tls if HTTPS-only
+    traefik.ingress.kubernetes.io/router.entrypoints: web   # use websecure + tls if HTTPS-only
 spec:
   ingressClassName: traefik
   rules:
@@ -59,6 +105,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: capacitor-direct
+                name: capacitor
                 port:
                   number: 9000
