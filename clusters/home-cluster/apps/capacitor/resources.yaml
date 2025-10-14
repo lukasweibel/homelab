@@ -33,14 +33,16 @@ metadata:
   name: capacitor
   namespace: flux-system
   labels:
-    app: capacitor
+    app.kubernetes.io/instance: capacitor
+    app.kubernetes.io/name: onechart
 spec:
   selector:
-    app: capacitor
+    app.kubernetes.io/instance: capacitor
+    app.kubernetes.io/name: onechart
   ports:
     - name: http
-      port: 80
-      targetPort: 9000
+      port: 80          # Service port (stable for ingresses)
+      targetPort: 9000  # Container actually listens here
       protocol: TCP
 ---
 apiVersion: networking.k8s.io/v1
@@ -49,7 +51,8 @@ metadata:
   name: capacitor
   namespace: flux-system
   labels:
-    app: capacitor
+    app.kubernetes.io/instance: capacitor
+    app.kubernetes.io/name: onechart
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
@@ -64,5 +67,4 @@ spec:
               service:
                 name: capacitor
                 port:
-                  number: 80
-
+                  number: 80 
