@@ -73,7 +73,6 @@ spec:
               cpu: 300m
               memory: 512Mi
 
-    # 2️⃣ Extra manifests from this folder (namespace + configmap)
     - repoURL: https://github.com/lukasweibel/homelab.git
       targetRevision: main
       path: clusters/home-cluster/argocd/apps/pihole
