@@ -18,5 +18,4 @@ spec:
       extraArgs:
         - --insecure
       service:
-        type: ClusterIP    # use Ingress/port-forward to reach it
-    # optional: create a simple Ingress via Traefik later if you want
+        type: ClusterIP

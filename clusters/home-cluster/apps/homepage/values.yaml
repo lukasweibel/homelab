@@ -73,6 +73,10 @@ config:
               href: https://k3s.local.lan/
               description: UI for k3s
               icon: kubernetes
+          - "ArgoCD":
+              href: http://argocd.local.lan/
+              description: UI ArgoCD
+              icon: argocd
       - Networking:
           - "Pi-hole":
               href: http://pihole.local.lan/admin/
