@@ -24,17 +24,18 @@ spec:
           size: 1Gi
           accessModes: [ReadWriteOnce]
 
+        # Let Pi-hole load /etc/dnsmasq.d/*.conf
+        extraEnvVars:
+          - name: FTLCONF_misc_etc_dnsmasq_d
+            value: "true"
+
         dnsmasq:
-          customDnsEntries:
-            - address=/homepage.local.lan/192.168.1.20
-            - address=/*.apps.local.lan/192.168.1.30    # wildcard
-            - cname=grafana.local.lan,monitoring.local.lan
           additionalHostsEntries:
-            - "192.168.1.20 homepage.local.lan"
+            - "192.168.1.49 homepage.local.lan"
             - "192.168.1.21 nas.local.lan nas"
 
         podAnnotations:
-          redeploy-timestamp: "2025-10-09T20:55:00Z"
+          redeploy-timestamp: "2025-10-14T21:05:00Z"
 
         serviceDns:
           type: LoadBalancer
