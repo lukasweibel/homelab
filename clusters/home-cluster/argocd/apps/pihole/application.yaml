@@ -26,8 +26,8 @@ spec:
 
         # Let Pi-hole load /etc/dnsmasq.d/*.conf
         extraEnvVars:
-          - name: FTLCONF_misc_etc_dnsmasq_d
-            value: "true"
+            FTLCONF_misc_etc_dnsmasq_d: "true"   # you already have this; harmless to keep
+            FTLCONF_misc_dnsmasq_lines: "address=/homepage.local.lan/192.168.1.49;address=/nas.local.lan/192.168.1.21"
 
         dnsmasq:
           additionalHostsEntries:
