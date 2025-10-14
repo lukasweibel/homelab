@@ -5,78 +5,67 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   destination:
     server: https://kubernetes.default.svc
     namespace: pihole
+  source:
+    repoURL: https://mojo2600.github.io/pihole-kubernetes/
+    chart: pihole
+    targetRevision: 2.34.0
+    helm:
+      values: |
+        TZ: "Europe/Zurich"
+        DNS1: "1.1.1.1"
+        DNS2: "9.9.9.9"
+        existingSecret: "pihole-secret"
 
-  sources:
-    # 1️⃣ Upstream Helm chart
-    - repoURL: https://mojo2600.github.io/pihole-kubernetes/
-      chart: pihole
-      targetRevision: 2.34.0
-      helm:
-        values: |
-          TZ: "Europe/Zurich"
-          DNS1: "1.1.1.1"
-          DNS2: "9.9.9.9"
-          existingSecret: "pihole-secret"
+        persistentVolumeClaim:
+          enabled: true
+          size: 1Gi
+          accessModes: [ReadWriteOnce]
 
-          # Persistence
-          persistentVolumeClaim:
+        extraVolumes:
+          - name: custom-dnsmasq
+            configMap:
+              name: pihole-custom-dnsmasq
+        extraVolumeMounts:
+          - name: custom-dnsmasq
+            mountPath: /etc/dnsmasq.d/02-custom.conf
+            subPath: 02-custom.conf
+
+        podAnnotations:
+          redeploy-timestamp: "2025-10-09T20:55:00Z"
+
+        serviceDns:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+
+        serviceWeb:
+          type: ClusterIP
+          http:
             enabled: true
-            size: 1Gi
-            accessModes: [ReadWriteOnce]
+            port: 8080
+          https:
+            enabled: false
 
-          # Mount our dnsmasq.d snippet
-          extraVolumes:
-            - name: custom-dnsmasq
-              configMap:
-                name: pihole-custom-dnsmasq
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+          hosts:
+            - pihole.local.lan
+          path: /
+          pathType: Prefix
+          tls: []
 
-          extraVolumeMounts:
-            - name: custom-dnsmasq
-              mountPath: /etc/dnsmasq.d/02-custom.conf
-              subPath: 02-custom.conf
-
-          podAnnotations:
-            redeploy-timestamp: "2025-10-09T20:55:00Z"
-
-          serviceDns:
-            type: LoadBalancer
-            externalTrafficPolicy: Local
-
-          serviceWeb:
-            type: ClusterIP
-            http:
-              enabled: true
-              port: 8080
-            https:
-              enabled: false
-
-          ingress:
-            enabled: true
-            ingressClassName: traefik
-            annotations:
-              traefik.ingress.kubernetes.io/router.entrypoints: web
-            hosts:
-              - pihole.local.lan
-            path: /
-            pathType: Prefix
-            tls: []
-
-          resources:
-            requests:
-              cpu: 50m
-              memory: 256Mi
-            limits:
-              cpu: 300m
-              memory: 512Mi
-
-    - repoURL: https://github.com/lukasweibel/homelab.git
-      targetRevision: main
-      path: clusters/home-cluster/argocd/apps/pihole
-
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
   syncPolicy:
     automated:
       prune: true
