@@ -27,13 +27,28 @@ spec:
     kind: OCIRepository
     name: capacitor
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capacitor-direct
+  namespace: flux-system
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: capacitor
+    app.kubernetes.io/name: onechart
+  ports:
+    - name: http
+      port: 9000
+      targetPort: 9000
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: capacitor
   namespace: flux-system
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web   # use websecure if TLS-only
+    traefik.ingress.kubernetes.io/router.entrypoints: web   # or websecure + tls if HTTPS-only
 spec:
   ingressClassName: traefik
   rules:
@@ -44,6 +59,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: capacitor
+                name: capacitor-direct
                 port:
                   number: 9000
