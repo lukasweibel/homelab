@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-custom-dnsmasq
+  namespace: pihole
+data:
+  02-custom.conf: |
+    # Static A records for local domains (served by dnsmasq)
+    address=/homepage.local.lan/192.168.1.49
+    address=/pihole.local.lan/192.168.1.49
+    address=/test.local.lan/192.168.1.49

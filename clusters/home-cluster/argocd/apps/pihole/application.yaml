@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pihole
+  namespace: argocd
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pihole
+
+  sources:
+    # 1️⃣ Upstream Helm chart
+    - repoURL: https://mojo2600.github.io/pihole-kubernetes/
+      chart: pihole
+      targetRevision: 2.34.0
+      helm:
+        values: |
+          TZ: "Europe/Zurich"
+          DNS1: "1.1.1.1"
+          DNS2: "9.9.9.9"
+          existingSecret: "pihole-secret"
+
+          # Persistence
+          persistentVolumeClaim:
+            enabled: true
+            size: 1Gi
+            accessModes: [ReadWriteOnce]
+
+          # Mount our dnsmasq.d snippet
+          extraVolumes:
+            - name: custom-dnsmasq
+              configMap:
+                name: pihole-custom-dnsmasq
+
+          extraVolumeMounts:
+            - name: custom-dnsmasq
+              mountPath: /etc/dnsmasq.d/02-custom.conf
+              subPath: 02-custom.conf
+
+          podAnnotations:
+            redeploy-timestamp: "2025-10-09T20:55:00Z"
+
+          serviceDns:
+            type: LoadBalancer
+            externalTrafficPolicy: Local
+
+          serviceWeb:
+            type: ClusterIP
+            http:
+              enabled: true
+              port: 8080
+            https:
+              enabled: false
+
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              traefik.ingress.kubernetes.io/router.entrypoints: web
+            hosts:
+              - pihole.local.lan
+            path: /
+            pathType: Prefix
+            tls: []
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 300m
+              memory: 512Mi
+
+    # 2️⃣ Extra manifests from this folder (namespace + configmap)
+    - repoURL: https://github.com/<you>/homelab.git
+      targetRevision: main
+      path: clusters/home-cluster/argocd/apps/pihole
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
