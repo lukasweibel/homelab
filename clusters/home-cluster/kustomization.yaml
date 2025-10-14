@@ -4,6 +4,5 @@ resources:
   - ./infra/traefik
   - ./infra/argocd
   - ./apps/homepage
-  - ./apps/pihole
   - ./apps/dashboard
   - ./apps/capacitor
