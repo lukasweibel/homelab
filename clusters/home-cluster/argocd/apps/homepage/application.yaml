@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/lukasweibel/homelab.git
     targetRevision: main
-    path: apps/homepage
+    path: clusters/home-cluster/apps/homepage
     helm:
       valueFiles:
         - values.yaml
