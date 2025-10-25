@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-bootstrap
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"   # ensure it comes before other apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/lukasweibel/homelab.git   # HTTPS avoids SSH agent issues
+    targetRevision: main
+    path: clusters/home-cluster/argocd/apps/argocd-bootstrap/manifests
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - PruneLast=true
