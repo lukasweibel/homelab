@@ -4,11 +4,11 @@ metadata:
   name: argocd-bootstrap
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-2"   # ensure it comes before other apps
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   project: default
   source:
-    repoURL: https://github.com/lukasweibel/homelab.git   # HTTPS avoids SSH agent issues
+    repoURL: https://github.com/lukasweibel/homelab.git
     targetRevision: main
     path: clusters/home-cluster/argocd/apps/argocd-bootstrap/manifests
     directory:
