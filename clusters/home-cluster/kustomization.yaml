@@ -3,6 +3,4 @@ kind: Kustomization
 resources:
   - ./infra/traefik
   - ./infra/argocd
-  - ./apps/homepage
   - ./apps/dashboard
-  - ./apps/capacitor
