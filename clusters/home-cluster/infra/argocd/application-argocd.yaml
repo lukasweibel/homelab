@@ -1,3 +1,4 @@
+# application-argocd.yaml (spec excerpt)
 spec:
   source:
     repoURL: https://argoproj.github.io/argo-helm
@@ -5,10 +6,12 @@ spec:
     targetRevision: 7.x.x
     helm:
       releaseName: argocd
-      valuesObject:
+      values: |
         server:
-          extraArgs: ["--insecure"]
-          service: { type: ClusterIP }
+          extraArgs:
+            - --insecure
+          service:
+            type: ClusterIP
           ingress:
             enabled: true
             ingressClassName: traefik
@@ -20,4 +23,5 @@ spec:
               - /
             pathType: Prefix
         configs:
-          secret: { createSecret: true }
+          secret:
+            createSecret: true
