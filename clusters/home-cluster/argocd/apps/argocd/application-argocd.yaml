@@ -1,4 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd   # ← CR itself goes here
 spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd   # ← chart installs into here
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-cd
