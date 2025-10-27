@@ -78,7 +78,7 @@ config:
               description: UI ArgoCD
               icon: argo
       - Networking:
-          - "Pi-hole":
+          - "Pi-hole-test":
               href: http://pihole.local.lan/admin/
               description: DNS Blocker
               icon: pi-hole
