@@ -2,16 +2,20 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: argocd
-  namespace: flux-system   # ← exists now; Argo will see this CR
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd      # ← Argo should create this
+    namespace: argocd
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
-    automated: {}          # optional: auto-sync
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-cd
@@ -20,7 +24,8 @@ spec:
       releaseName: argocd
       valuesObject:
         server:
-          extraArgs: [--insecure]
+          extraArgs:
+            - --insecure
           service:
             type: ClusterIP
           ingress:
