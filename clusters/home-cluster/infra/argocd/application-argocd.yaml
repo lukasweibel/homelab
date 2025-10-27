@@ -1,10 +1,4 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: argocd
-  namespace: argocd
 spec:
-  project: default
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-cd
@@ -14,24 +8,16 @@ spec:
       valuesObject:
         server:
           extraArgs: ["--insecure"]
-          service:
-            type: ClusterIP
+          service: { type: ClusterIP }
           ingress:
             enabled: true
             ingressClassName: traefik
             annotations:
               traefik.ingress.kubernetes.io/router.entrypoints: web
             hosts:
-              - host: argocd.local.lan   # <-- object form
-                paths:
-                  - /                    # <-- per-host paths
+              - argocd.local.lan
+            paths:
+              - /
             pathType: Prefix
         configs:
-          secret:
-            createSecret: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated: { prune: true, selfHeal: true }
-    syncOptions: [CreateNamespace=true, ServerSideApply=true]
+          secret: { createSecret: true }
