@@ -13,8 +13,7 @@ spec:
       releaseName: argocd
       valuesObject:
         server:
-          extraArgs:
-            - --insecure
+          extraArgs: ["--insecure"]
           service:
             type: ClusterIP
           ingress:
@@ -23,9 +22,9 @@ spec:
             annotations:
               traefik.ingress.kubernetes.io/router.entrypoints: web
             hosts:
-              - argocd.local.lan
-            paths:
-              - /
+              - host: argocd.local.lan   # <-- object form
+                paths:
+                  - /                    # <-- per-host paths
             pathType: Prefix
         configs:
           secret:
@@ -34,9 +33,5 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true, ServerSideApply=true]
