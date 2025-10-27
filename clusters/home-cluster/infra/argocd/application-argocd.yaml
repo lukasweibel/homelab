@@ -11,7 +11,7 @@ spec:
     targetRevision: 7.x.x
     helm:
       releaseName: argocd
-      values: |
+      valuesObject:
         server:
           extraArgs:
             - --insecure
