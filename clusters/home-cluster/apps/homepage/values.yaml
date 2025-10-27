@@ -76,7 +76,7 @@ config:
           - "ArgoCD":
               href: http://argocd.local.lan/
               description: UI ArgoCD
-              icon: argocd
+              icon: argo
       - Networking:
           - "Pi-hole":
               href: http://pihole.local.lan/admin/
