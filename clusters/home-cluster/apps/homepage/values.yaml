@@ -66,6 +66,15 @@ config:
             cpu: true
             memory: true
             showLabel: true
+      - openmeteo:
+          label: Winterthur
+          latitude: 47.5024
+          longitude: 8.7241
+          timezone: Europe/Zurich
+          units: metric
+          cache: 5
+          format:
+            maximumFractionDigits: 1
 
     services.yaml: |
       - Cluster:
