@@ -1,0 +1,5 @@
+apiVersion: v2
+name: my-frontend
+description: A minimal frontend
+type: application
+version: 0.1.0
