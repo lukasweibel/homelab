@@ -10,12 +10,6 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-cd
@@ -33,9 +27,18 @@ spec:
             ingressClassName: traefik
             annotations:
               traefik.ingress.kubernetes.io/router.entrypoints: web
-            hostname: argocd.local.lan
-            path: /
+            hosts:
+              - argocd.local.lan
+            paths:
+              - /
             pathType: Prefix
         configs:
           secret:
             createSecret: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
