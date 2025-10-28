@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: argocd-ingress
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -11,34 +11,14 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
   source:
-    repoURL: https://argoproj.github.io/argo-helm
-    chart: argo-cd
-    targetRevision: 7.x.x
-    helm:
-      releaseName: argocd
-      valuesObject:
-        server:
-          extraArgs:
-            - --insecure
-          service:
-            type: ClusterIP
-          ingress:
-            enabled: true
-            ingressClassName: traefik
-            annotations:
-              traefik.ingress.kubernetes.io/router.entrypoints: web
-            hosts:
-              - argocd.local.lan
-            paths:
-              - /
-            pathType: Prefix
-        configs:
-          secret:
-            createSecret: true
+    repoURL: https://github.com/lukasweibel/homelab.git
+    targetRevision: main
+    path: clusters/home-cluster/argocd
+    directory:
+      include: "ingress.yaml"
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
