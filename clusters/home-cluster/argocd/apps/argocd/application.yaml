@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-ingress
+  name: argocd-config
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -13,9 +13,9 @@ spec:
   source:
     repoURL: https://github.com/lukasweibel/homelab.git
     targetRevision: main
-    path: clusters/home-cluster/argocd
+    path: clusters/home-cluster/argocd/apps/argocd
     directory:
-      include: "ingress.yaml"
+      recurse: false
   syncPolicy:
     automated:
       prune: true
