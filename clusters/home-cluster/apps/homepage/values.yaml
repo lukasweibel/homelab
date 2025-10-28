@@ -74,11 +74,11 @@ config:
               description: UI for k3s
               icon: kubernetes
           - "ArgoCD":
-              href: http://argocd.local.lan/
+              href: http://argo.local.lan/
               description: UI ArgoCD
-              icon: argo
+              icon: argo-cd
       - Networking:
-          - "Pi-hole-test":
+          - "Pi-hole":
               href: http://pihole.local.lan/admin/
               description: DNS Blocker
               icon: pi-hole
