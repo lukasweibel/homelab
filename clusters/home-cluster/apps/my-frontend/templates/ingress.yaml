@@ -1,19 +1,43 @@
+{{- if .Values.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: my-frontend
-  namespace: my-frontend
+  name: {{ include "my-frontend.fullname" . }}
+  labels:
+    {{- include "my-frontend.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
+  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
   rules:
-    - host: my-frontend.local.lan
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}
             backend:
               service:
-                name:
+                name: {{ include "my-frontend.fullname" $ }}
                 port:
-                  number: 80
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}
