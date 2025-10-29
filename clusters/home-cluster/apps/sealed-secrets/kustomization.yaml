@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.24.0/controller.yaml
   - ingress.yaml
+  - middleware.yaml

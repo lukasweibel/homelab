@@ -1,18 +1,20 @@
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sealed-secrets-cert
   namespace: kube-system
   annotations:
-    # adjust depending on your ingress controller (traefik, nginx, contour, etc.)
     kubernetes.io/ingress.class: traefik
-    # For Traefik v2 you might use traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    # reference the middleware in the same namespace (Traefik CRD middleware)
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-sealed-secrets-rewrite@kubernetescrd
 spec:
   rules:
   - host: pub-key.local.lan
     http:
       paths:
+      # pretty URL that will be rewritten to /v1/cert.pem by the middleware
       - path: /sealed-secrets/your-cluster.cert
         pathType: Prefix
         backend:
@@ -20,4 +22,12 @@ spec:
             name: sealed-secrets-controller
             port:
               number: 8080
-  # If you want TLS on this host, add a tls: block referencing a secret with a cert
+      # direct controller endpoint
+      - path: /v1/cert.pem
+        pathType: Prefix
+        backend:
+          service:
+            name: sealed-secrets-controller
+            port:
+              number: 8080
+
