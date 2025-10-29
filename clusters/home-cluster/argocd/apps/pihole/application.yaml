@@ -15,8 +15,8 @@ spec:
     helm:
       values: |
         TZ: "Europe/Zurich"
-        DNS1: "1.1.1.1"
-        DNS2: "9.9.9.9"
+        DNS1: "8.8.8.8"
+        DNS2: "8.8.4.4"
         existingSecret: "pihole-secret"
 
         persistentVolumeClaim:
@@ -28,13 +28,12 @@ spec:
         extraEnvVars:
             FTLCONF_misc_etc_dnsmasq_d: "true"
             FTLCONF_misc_dnsmasq_lines: "address=/local.lan/192.168.1.49"
-
-        dnsmasq:
-          additionalHostsEntries:
-            - "192.168.1.21 nas.local.lan nas"
+            FTLCONF_dns_cache_size: "10000"
+            FTLCONF_dns_cache_ttl_min: "60"
+            FTLCONF_dns_cache_ttl_max: "86400"
 
         podAnnotations:
-          redeploy-timestamp: "2025-10-29T12:00:00Z"
+          redeploy-timestamp: "2025-10-29T14:30:00Z"
 
         serviceDns:
           type: LoadBalancer
