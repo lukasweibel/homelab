@@ -1,7 +1,0 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: sealed-secrets-rewrite
-  namespace: kube-system
-spec:
-  replacePath: /v1/cert.pem
