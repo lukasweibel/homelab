@@ -26,16 +26,15 @@ spec:
 
         # Let Pi-hole load /etc/dnsmasq.d/*.conf
         extraEnvVars:
-            FTLCONF_misc_etc_dnsmasq_d: "true"   # you already have this; harmless to keep
-            FTLCONF_misc_dnsmasq_lines: "address=/homepage.local.lan/192.168.1.49;address=/nas.local.lan/192.168.1.21"
+            FTLCONF_misc_etc_dnsmasq_d: "true"
+            FTLCONF_misc_dnsmasq_lines: "address=/local.lan/192.168.1.49"
 
         dnsmasq:
           additionalHostsEntries:
-            - "192.168.1.49 homepage.local.lan"
             - "192.168.1.21 nas.local.lan nas"
 
         podAnnotations:
-          redeploy-timestamp: "2025-10-14T21:05:00Z"
+          redeploy-timestamp: "2025-10-29T12:00:00Z"
 
         serviceDns:
           type: LoadBalancer
