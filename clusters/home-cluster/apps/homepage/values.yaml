@@ -91,3 +91,7 @@ config:
               href: http://pihole.local.lan/admin/
               description: DNS Blocker
               icon: pi-hole
+          - "Zyxel Router":
+              href: http://zyxel.local.lan
+              description: ISP Router
+              icon: router
