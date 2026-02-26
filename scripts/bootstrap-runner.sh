@@ -4,7 +4,7 @@ set -e
 # ── Config ────────────────────────────────────────────────────────────────────
 RUNNER_VERSION="2.322.0"
 RUNNER_DIR="$HOME/actions-runner"
-REPO_URL="https://github.com/lukasweibek/homelab"
+REPO_URL="https://github.com/lukasweibel/homelab"
 
 # ── Args ──────────────────────────────────────────────────────────────────────
 TOKEN=$1
@@ -17,16 +17,16 @@ if [[ -z "$TOKEN" || -z "$HOST_LABEL" ]]; then
 fi
 
 # ── Download ──────────────────────────────────────────────────────────────────
-mkdir -p "$RUNNER_DIR" && cd "$RUNNER_DIR"
+mkdir -p "$RUNNER_DIR"
 
-curl -o actions-runner.tar.gz -L \
+curl -o "$RUNNER_DIR/actions-runner.tar.gz" -L \
   "https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz"
 
-tar xzf actions-runner.tar.gz
-rm actions-runner.tar.gz
+tar xzf "$RUNNER_DIR/actions-runner.tar.gz" -C "$RUNNER_DIR"
+rm "$RUNNER_DIR/actions-runner.tar.gz"
 
 # ── Configure ─────────────────────────────────────────────────────────────────
-./config.sh \
+"$RUNNER_DIR/config.sh" \
   --url "$REPO_URL" \
   --token "$TOKEN" \
   --name "$HOST_LABEL" \
@@ -35,9 +35,9 @@ rm actions-runner.tar.gz
   --unattended
 
 # ── Install & start as systemd service ───────────────────────────────────────
-sudo ./svc.sh install
-sudo ./svc.sh start
+sudo "$RUNNER_DIR/svc.sh" install
+sudo "$RUNNER_DIR/svc.sh" start
 
 echo ""
 echo "Runner '$HOST_LABEL' registered and running as a service"
-echo "   Labels: self-hosted, $HOST_LABEL"
+echo "Labels: self-hosted, $HOST_LABEL"
