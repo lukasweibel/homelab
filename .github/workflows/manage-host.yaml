@@ -1,16 +1,19 @@
 name: Manage Hardware
-
 on:
   push:
     branches: [main]
-  
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: self-hosted
+  apply-rpi-01:
+    runs-on: [self-hosted, rpi-01]
     steps:
-      - name: Test
+      - uses: actions/checkout@v4
+
+      - name: Hello from host
         run: |
-          echo "hello"
-          ls
+          echo "🖥️  Hostname:    $(hostname)"
+          echo "👤  User:        $(whoami)"
+          echo "🏠  Home:        $HOME"
+          echo "📐  Arch:        $(uname -m)"
+          echo "🐧  OS:          $(cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2)"

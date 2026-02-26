@@ -35,9 +35,9 @@ rm "$RUNNER_DIR/actions-runner.tar.gz"
   --unattended
 
 # ── Install & start as systemd service ───────────────────────────────────────
-sudo "$RUNNER_DIR/svc.sh" install
-sudo "$RUNNER_DIR/svc.sh" start
-
+cd "$RUNNER_DIR"
+sudo ./svc.sh install
+sudo ./svc.sh start
 echo ""
 echo "Runner '$HOST_LABEL' registered and running as a service"
 echo "Labels: self-hosted, $HOST_LABEL"

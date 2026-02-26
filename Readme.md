@@ -6,5 +6,11 @@ setting up Argocd:
 # Bootstrap new Hardware for GitHub Actions
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lukasweibel/homelab/main/scripts/bootstrap-runner.sh | bash -s -- <TOKEN> rpi-01
+curl -fsSL https://raw.githubusercontent.com/lukasweibel/homelab/main/scripts/bootstrap-runner.sh -o /tmp/bootstrap-runner.sh
+```
+```bash
+chmod +x /tmp/bootstrap-runner.sh
+```
+```bash
+/tmp/bootstrap-runner.sh <TOKEN> <LABEL>
 ```
