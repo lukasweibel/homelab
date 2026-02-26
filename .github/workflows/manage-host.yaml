@@ -1,4 +1,4 @@
-name: Deploy Dockerimage to Rapberry Pi
+name: Manage Hardware
 
 on:
   push:
