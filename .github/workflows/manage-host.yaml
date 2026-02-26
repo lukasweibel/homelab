@@ -1,0 +1,16 @@
+name: Deploy Dockerimage to Rapberry Pi
+
+on:
+  push:
+    branches: [main]
+  
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Test
+        run: |
+          echo "hello"
+          ls

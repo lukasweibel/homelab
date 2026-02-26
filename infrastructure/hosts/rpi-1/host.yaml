@@ -1,0 +1,6 @@
+name: rpi-01
+role: dns
+arch: arm64
+runner_labels:
+  - self-hosted
+  - rpi-01
