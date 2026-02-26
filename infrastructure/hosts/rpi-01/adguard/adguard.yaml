@@ -1,0 +1,13 @@
+dns:
+  bind_hosts:
+    - 0.0.0.0
+  port: 53
+  upstream_dns:
+    - tls://9.9.9.9
+    - tls://1.1.1.1
+    - tls://8.8.8.8
+  rewrites:
+    - domain: "*.local.lan"
+      answer: 192.168.1.3
+    - domain: zyxel.local.lan
+      answer: 192.168.1.1
