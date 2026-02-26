@@ -6,6 +6,11 @@ HOST_DIR="infrastructure/hosts/$HOST"
 
 echo "Deploying docker services for $HOST..."
 
+if [[ -f "$HOST_DIR/dhcpcd.conf" ]]; then
+  sudo cp "$HOST_DIR/dhcpcd.conf" /etc/dhcpcd.conf
+  sudo systemctl restart dhcpcd
+fi
+
 docker compose -f "$HOST_DIR/docker-compose.yml" down 2>/dev/null || true
 docker rm -f adguard 2>/dev/null || true
 
