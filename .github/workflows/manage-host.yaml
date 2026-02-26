@@ -10,10 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Hello from host
+      - name: System info
         run: |
-          echo "🖥️  Hostname:    $(hostname)"
-          echo "👤  User:        $(whoami)"
-          echo "🏠  Home:        $HOME"
-          echo "📐  Arch:        $(uname -m)"
-          echo "🐧  OS:          $(cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2)"
+          echo "Hostname: $(hostname)"
+          echo "Arch:     $(uname -m)"
+
+      - name: Deploy services
+        run: bash scripts/deploy-host.sh rpi-01
