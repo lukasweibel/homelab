@@ -3,7 +3,7 @@ set -e
 
 # ── Config ────────────────────────────────────────────────────────────────────
 RUNNER_VERSION="2.322.0"
-RUNNER_DIR="$HOME/actions-runner"
+RUNNER_DIR="/home/lukasweibel/actions-runner"
 REPO_URL="https://github.com/lukasweibel/homelab"
 
 # ── Args ──────────────────────────────────────────────────────────────────────
