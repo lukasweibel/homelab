@@ -17,6 +17,16 @@ fi
 echo "Setting resolv.conf to external DNS..."
 printf 'nameserver 1.1.1.1\nnameserver 8.8.8.8\n' | sudo tee /etc/resolv.conf > /dev/null
 
+# Ensure Docker daemon uses external DNS (it caches DNS from startup)
+echo "Configuring Docker DNS..."
+sudo mkdir -p /etc/docker
+DOCKER_DAEMON_JSON='{"dns": ["1.1.1.1", "8.8.8.8"]}'
+if [[ ! -f /etc/docker/daemon.json ]] || ! grep -q '"dns"' /etc/docker/daemon.json; then
+  echo "$DOCKER_DAEMON_JSON" | sudo tee /etc/docker/daemon.json > /dev/null
+  sudo systemctl restart docker
+  echo "Docker daemon restarted with external DNS"
+fi
+
 # Pull images with reliable DNS
 docker compose -f "$HOST_DIR/docker-compose.yml" pull
 
