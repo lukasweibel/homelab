@@ -6,14 +6,6 @@ HOST_DIR="infrastructure/hosts/$HOST"
 
 echo "Deploying docker services for $HOST..."
 
-if [[ -f "$HOST_DIR/dhcpcd.conf" ]]; then
-  sudo cp "$HOST_DIR/dhcpcd.conf" /etc/dhcpcd.conf
-  sudo systemctl restart dhcpcd
-fi
-
-# Ensure the Pi itself uses external DNS (not AdGuard on localhost)
-printf 'nameserver 9.9.9.9\nnameserver 1.1.1.1\n' | sudo tee /etc/resolv.conf > /dev/null
-
 docker compose -f "$HOST_DIR/docker-compose.yml" down 2>/dev/null || true
 docker rm -f adguard 2>/dev/null || true
 
