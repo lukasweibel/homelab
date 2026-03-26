@@ -10,22 +10,16 @@ echo "Deploying docker services for $HOST..."
 if [[ -f "$HOST_DIR/dhcpcd.conf" ]]; then
   echo "Syncing dhcpcd.conf..."
   sudo cp "$HOST_DIR/dhcpcd.conf" /etc/dhcpcd.conf
-  sudo systemctl restart dhcpcd
 fi
 
-# Force resolv.conf to external DNS so pulls never depend on AdGuard
-echo "Setting resolv.conf to external DNS..."
+# Replace resolv.conf with external DNS so host + Docker never depend on AdGuard
+sudo rm -f /etc/resolv.conf
 printf 'nameserver 1.1.1.1\nnameserver 8.8.8.8\n' | sudo tee /etc/resolv.conf > /dev/null
+echo "resolv.conf set to external DNS"
 
-# Ensure Docker daemon uses external DNS (it caches DNS from startup)
-echo "Configuring Docker DNS..."
-sudo mkdir -p /etc/docker
-DOCKER_DAEMON_JSON='{"dns": ["1.1.1.1", "8.8.8.8"]}'
-if [[ ! -f /etc/docker/daemon.json ]] || ! grep -q '"dns"' /etc/docker/daemon.json; then
-  echo "$DOCKER_DAEMON_JSON" | sudo tee /etc/docker/daemon.json > /dev/null
-  sudo systemctl restart docker
-  echo "Docker daemon restarted with external DNS"
-fi
+# Restart Docker so it picks up the new resolv.conf
+sudo systemctl restart docker
+echo "Docker restarted"
 
 # Pull images with reliable DNS
 docker compose -f "$HOST_DIR/docker-compose.yml" pull
