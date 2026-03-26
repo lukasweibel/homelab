@@ -86,6 +86,11 @@ config:
               href: http://argo.local.lan/
               description: UI ArgoCD
               icon: argo-cd
+      - Automation:
+          - "n8n":
+              href: http://n8n.local.lan/
+              description: Workflow Automation
+              icon: n8n
       - Networking:
           - "AdGuard Home":
               href: http://adguard.local.lan/
