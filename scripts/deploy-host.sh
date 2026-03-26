@@ -25,9 +25,8 @@ if [[ -f "$HOST_DIR/adguard/AdGuardHome.yaml" ]]; then
   sudo cp "$HOST_DIR/adguard/AdGuardHome.yaml" /opt/adguard/conf/AdGuardHome.yaml
 fi
 
-# ── Quick restart: images are cached, DNS downtime is < 2 seconds ─────────────
-docker compose -f "$HOST_DIR/docker-compose.yml" down 2>/dev/null || true
-docker rm -f adguard 2>/dev/null || true
-docker compose -f "$HOST_DIR/docker-compose.yml" up -d --remove-orphans
+# ── Quick restart: images are cached, DNS downtime is minimal ─────────────────
+# force-recreate avoids a full down/up cycle — container is replaced in-place
+docker compose -f "$HOST_DIR/docker-compose.yml" up -d --force-recreate --remove-orphans
 
 echo "Deploy done"
