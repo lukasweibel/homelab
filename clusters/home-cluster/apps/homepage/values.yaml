@@ -87,10 +87,10 @@ config:
               description: UI ArgoCD
               icon: argo-cd
       - Networking:
-          - "Pi-hole":
-              href: http://pihole.local.lan/admin/
+          - "AdGuard Home":
+              href: http://adguard.local.lan/
               description: DNS Blocker
-              icon: pi-hole
+              icon: adguard-home
           - "Zyxel Router":
               href: http://zyxel.local.lan
               description: ISP Router
