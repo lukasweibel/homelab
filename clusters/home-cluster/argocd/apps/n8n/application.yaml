@@ -13,6 +13,11 @@ spec:
       values: |
         timezone: "Europe/Zurich"
 
+        main:
+          extraEnvVars:
+            N8N_LISTEN_ADDRESS:
+              value: "0.0.0.0"
+
         ingress:
           enabled: true
           className: traefik
