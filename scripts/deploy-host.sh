@@ -6,8 +6,8 @@ HOST_DIR="infrastructure/hosts/$HOST"
 
 echo "Deploying docker services for $HOST..."
 
-docker compose -f "$HOST_DIR/docker-compose.yml" down 2>/dev/null || true
-docker rm -f adguard 2>/dev/null || true
+# Pull images while AdGuard is still running and providing DNS
+docker compose -f "$HOST_DIR/docker-compose.yml" pull
 
 if [[ -f "$HOST_DIR/adguard/AdGuardHome.yaml" ]]; then
   echo "Syncing AdGuard config..."
@@ -15,8 +15,9 @@ if [[ -f "$HOST_DIR/adguard/AdGuardHome.yaml" ]]; then
   sudo cp "$HOST_DIR/adguard/AdGuardHome.yaml" /opt/adguard/conf/AdGuardHome.yaml
 fi
 
-# Now bring up
-docker compose -f "$HOST_DIR/docker-compose.yml" pull
+# Restart with new config (image already cached)
+docker compose -f "$HOST_DIR/docker-compose.yml" down 2>/dev/null || true
+docker rm -f adguard 2>/dev/null || true
 docker compose -f "$HOST_DIR/docker-compose.yml" up -d --remove-orphans
 
 echo "Deploy done"
