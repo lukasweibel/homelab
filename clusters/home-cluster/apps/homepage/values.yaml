@@ -79,7 +79,7 @@ config:
     services.yaml: |
       - Cluster:
           - "k3s Dashboard":
-              href: https://k3s.local.lan/
+              href: http://k3s.local.lan/
               description: UI for k3s
               icon: kubernetes
           - "ArgoCD":
