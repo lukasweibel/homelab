@@ -18,9 +18,7 @@ metadata:
   namespace: kubernetes-dashboard
 spec:
   entryPoints:
-    - websecure
-  tls:
-    secretName: dashboard-tls
+    - web
   routes:
     - match: Host(`k3s.local.lan`) && PathPrefix(`/api`)
       kind: Rule
