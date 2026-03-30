@@ -4,7 +4,8 @@ metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   rules:
     - host: k3s.local.lan
@@ -16,4 +17,4 @@ spec:
               service:
                 name: dashboard-kong-proxy
                 port:
-                  number: 80
+                  number: 443

@@ -14,8 +14,6 @@ spec:
           kong:
             proxy:
               http:
-                enabled: true
-              tls:
                 enabled: false
     - repoURL: https://github.com/lukasweibel/homelab.git
       targetRevision: main
