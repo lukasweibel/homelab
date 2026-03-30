@@ -8,25 +8,19 @@ spec:
   source:
     repoURL: https://kubernetes.github.io/dashboard/
     chart: kubernetes-dashboard
-    targetRevision: 7.5.0
+    targetRevision: 7.14.0
     helm:
       values: |
-        metricsScraper:
-          enabled: true
-        service:
-          type: ClusterIP
-        ingress:
-          enabled: true
-          className: traefik
-          annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: web
-          hosts:
-            - host: k3s.local.lan
-              paths:
-                - path: /
-                  pathType: Prefix
-        extraLabels:
-          app.kubernetes.io/part-of: kubernetes-dashboard
+        kong:
+          proxy:
+            http:
+              enabled: true
+        app:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hosts:
+              - k3s.local.lan
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
