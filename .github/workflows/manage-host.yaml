@@ -17,3 +17,16 @@ jobs:
 
       - name: Deploy services
         run: bash scripts/deploy-host.sh rpi-01
+
+  apply-rpi-02:
+    runs-on: [self-hosted, rpi-02]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System info
+        run: |
+          echo "Hostname: $(hostname)"
+          echo "Arch:     $(uname -m)"
+
+      - name: Deploy services
+        run: bash scripts/deploy-host.sh rpi-02
