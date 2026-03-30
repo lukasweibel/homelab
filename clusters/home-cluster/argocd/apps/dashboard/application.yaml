@@ -17,10 +17,6 @@ spec:
                 enabled: true
               tls:
                 enabled: false
-          auth:
-            containers:
-              args:
-                - --enable-insecure-login
     - repoURL: https://github.com/lukasweibel/homelab.git
       targetRevision: main
       path: clusters/home-cluster/apps/dashboard
