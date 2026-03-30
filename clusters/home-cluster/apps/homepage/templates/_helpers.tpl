@@ -25,12 +25,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{- define "homepage.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
 {{- if .Values.serviceAccount.name -}}
 {{- .Values.serviceAccount.name -}}
-{{- else -}}
+{{- else if .Values.serviceAccount.create -}}
 {{- include "homepage.fullname" . -}}
-{{- end -}}
 {{- else -}}
 default
 {{- end -}}
