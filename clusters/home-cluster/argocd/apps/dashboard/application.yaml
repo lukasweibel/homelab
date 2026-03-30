@@ -15,12 +15,8 @@ spec:
           proxy:
             http:
               enabled: true
-        app:
-          ingress:
-            enabled: true
-            ingressClassName: traefik
-            hosts:
-              - k3s.local.lan
+            tls:
+              enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-dashboard
