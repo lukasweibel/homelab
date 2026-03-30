@@ -16,12 +16,4 @@ subjects:
   - kind: ServiceAccount
     name: dashboard-admin
     namespace: kubernetes-dashboard
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: dashboard-admin-token
-  namespace: kubernetes-dashboard
-  annotations:
-    kubernetes.io/service-account.name: dashboard-admin
-type: kubernetes.io/service-account-token
+
