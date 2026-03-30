@@ -2,7 +2,5 @@ name: rpi-01
 runner_label: rpi-01
 packages:
   - git
-  - docker.io
-  - apache2-utils
 services:
   - docker

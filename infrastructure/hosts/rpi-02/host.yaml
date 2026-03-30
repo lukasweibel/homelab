@@ -1,0 +1,9 @@
+name: rpi-02
+runner_label: rpi-02
+packages:
+  - git
+  - curl
+services: []
+tools:
+  kubeseal: "0.24.0"
+  kubectl: "1.32.0"
