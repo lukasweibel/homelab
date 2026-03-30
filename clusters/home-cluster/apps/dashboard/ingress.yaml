@@ -7,6 +7,9 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
+  tls:
+    - hosts:
+        - k3s.local.lan
   rules:
     - host: k3s.local.lan
       http:
@@ -17,4 +20,4 @@ spec:
               service:
                 name: dashboard-kong-proxy
                 port:
-                  number: 443
+                  number: 80
