@@ -46,7 +46,7 @@ install_tool() {
 echo "Deploying $HOST..."
 
 # ── Install / update packages from host.yaml ─────────────────────────────────
-PACKAGES=$(grep -A 100 '^packages:' "$HOST_YAML" | tail -n +2 | grep '^\s*-' | sed 's/.*-\s*//' | tr '\n' ' ')
+PACKAGES=$(sed -n '/^packages:/,/^[^ ]/p' "$HOST_YAML" | grep '^\s*-' | sed 's/.*-\s*//' | tr '\n' ' ')
 if [[ -n "$PACKAGES" ]]; then
   echo "Installing/updating packages: $PACKAGES"
   sudo apt-get update -qq
@@ -54,7 +54,7 @@ if [[ -n "$PACKAGES" ]]; then
 fi
 
 # ── Enable & start services from host.yaml ───────────────────────────────────
-SERVICES=$(grep -A 100 '^services:' "$HOST_YAML" | tail -n +2 | grep '^\s*-' | sed 's/.*-\s*//' | tr '\n' ' ')
+SERVICES=$(sed -n '/^services:/,/^[^ ]/p' "$HOST_YAML" | grep '^\s*-' | sed 's/.*-\s*//' | tr '\n' ' ')
 for svc in $SERVICES; do
   echo "Enabling and starting service: $svc"
   sudo systemctl enable "$svc"
