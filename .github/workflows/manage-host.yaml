@@ -19,6 +19,7 @@ jobs:
         run: bash scripts/deploy-host.sh rpi-01
 
   apply-rpi-02:
+    needs: apply-rpi-01
     runs-on: [self-hosted, rpi-02]
     steps:
       - uses: actions/checkout@v4
