@@ -99,6 +99,10 @@ config:
               href: http://adguard.local.lan/
               description: DNS Blocker
               icon: adguard-home
+          - "Unifi Controller":
+              href: https://unifi.local.lan:8443
+              description: Network Management
+              icon: unifi
           - "Zyxel Router":
               href: http://zyxel.local.lan
               description: ISP Router
