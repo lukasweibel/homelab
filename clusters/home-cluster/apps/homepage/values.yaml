@@ -94,6 +94,11 @@ config:
               href: http://n8n.local.lan/
               description: Workflow Automation
               icon: n8n
+      - Finance:
+          - "Actual Budget":
+              href: http://budget.local.lan/
+              description: Personal Budgeting
+              icon: actual-budget
       - Networking:
           - "AdGuard Home":
               href: http://adguard.local.lan/
