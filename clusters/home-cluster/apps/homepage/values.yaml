@@ -96,7 +96,7 @@ config:
               icon: n8n
       - Finance:
           - "Actual Budget":
-              href: http://budget.local.lan/
+              href: https://budget.local.lan/
               description: Personal Budgeting
               icon: actual-budget
       - Networking:

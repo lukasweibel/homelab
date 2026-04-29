@@ -1,0 +1,11 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "actual-budget.fullname" . }}-headers
+  labels:
+    {{- include "actual-budget.labels" . | nindent 4 }}
+spec:
+  headers:
+    customResponseHeaders:
+      Cross-Origin-Opener-Policy: "same-origin"
+      Cross-Origin-Embedder-Policy: "require-corp"
