@@ -51,12 +51,6 @@ spec:
               traefik.ingress.kubernetes.io/router.tls: "true"
             hosts:
               - auth.local.lan
-            paths:
-              - path: /
-                pathType: Prefix
-            tls:
-              - hosts:
-                  - auth.local.lan
   destination:
     server: https://kubernetes.default.svc
     namespace: authentik
