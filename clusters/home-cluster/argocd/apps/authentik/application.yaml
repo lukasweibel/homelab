@@ -26,6 +26,7 @@ spec:
         postgresql:
           enabled: true
           image:
+            registry: ghcr.io
             tag: "15"
           auth:
             username: authentik
@@ -38,6 +39,7 @@ spec:
         redis:
           enabled: true
           image:
+            registry: ghcr.io
             tag: "7"
 
         server:
