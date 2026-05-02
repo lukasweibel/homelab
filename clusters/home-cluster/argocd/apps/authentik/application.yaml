@@ -17,6 +17,11 @@ spec:
             enabled: false
           postgresql:
             password: "changeme"
+            host: authentik-postgresql
+            name: authentik
+            user: authentik
+          redis:
+            host: authentik-redis
 
         global:
           envFrom:
@@ -24,23 +29,10 @@ spec:
                 name: authentik-secrets
 
         postgresql:
-          enabled: true
-          image:
-            registry: ghcr.io
-            tag: "15"
-          auth:
-            username: authentik
-            database: authentik
-            existingSecret: authentik-secrets
-            secretKeys:
-              adminPasswordKey: AUTHENTIK_POSTGRESQL__POSTGRES_PASSWORD
-              userPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
+          enabled: false
 
         redis:
-          enabled: true
-          image:
-            registry: ghcr.io
-            tag: "7"
+          enabled: false
 
         server:
           ingress:
