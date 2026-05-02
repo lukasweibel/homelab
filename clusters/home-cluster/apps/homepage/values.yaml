@@ -99,6 +99,11 @@ config:
               href: https://budget.local.lan/
               description: Personal Budgeting
               icon: actual-budget
+      - Security:
+          - "Authentik":
+              href: https://auth.local.lan/
+              description: SSO Identity Provider
+              icon: authentik
       - Networking:
           - "AdGuard Home":
               href: http://adguard.local.lan/

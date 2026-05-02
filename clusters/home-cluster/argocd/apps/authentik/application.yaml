@@ -25,15 +25,20 @@ spec:
 
         postgresql:
           enabled: true
+          image:
+            tag: "15"
           auth:
             username: authentik
             database: authentik
             existingSecret: authentik-secrets
             secretKeys:
+              adminPasswordKey: AUTHENTIK_POSTGRESQL__POSTGRES_PASSWORD
               userPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
 
         redis:
           enabled: true
+          image:
+            tag: "7"
 
         server:
           ingress:
