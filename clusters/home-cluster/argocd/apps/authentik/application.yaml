@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.goauthentik.io
+    chart: authentik
+    targetRevision: 2024.12.3
+    helm:
+      values: |
+        authentik:
+          secret_key: "changeme"
+          error_reporting:
+            enabled: false
+          postgresql:
+            password: "changeme"
+
+        global:
+          envFrom:
+            - secretRef:
+                name: authentik-secrets
+
+        postgresql:
+          enabled: true
+          auth:
+            username: authentik
+            database: authentik
+            existingSecret: authentik-secrets
+            secretKeys:
+              userPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
+
+        redis:
+          enabled: true
+
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            hosts:
+              - host: auth.local.lan
+                paths:
+                  - path: /
+                    pathType: Prefix
+            tls:
+              - hosts:
+                  - auth.local.lan
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: authentik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
