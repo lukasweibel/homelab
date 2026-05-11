@@ -18,9 +18,10 @@ spec:
           N8N_SECURE_COOKIE: "false"
           WEBHOOK_URL: "http://n8n.local.lan/"
 
-        persistence:
-          enabled: true
-          size: 2Gi
+        main:
+          persistence:
+            enabled: true
+            size: 2Gi
 
         ingress:
           enabled: true
