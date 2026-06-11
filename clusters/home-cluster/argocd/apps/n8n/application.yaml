@@ -13,6 +13,8 @@ spec:
       values: |
         timezone: "Europe/Zurich"
 
+        existingEncryptionKeySecret: "n8n-encryption-key"
+
         extraEnvVars:
           N8N_LISTEN_ADDRESS: "0.0.0.0"
           N8N_SECURE_COOKIE: "false"
