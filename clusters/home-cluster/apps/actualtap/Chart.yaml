@@ -1,0 +1,5 @@
+apiVersion: v2
+name: actualtap
+description: ActualTap - NFC tap-to-pay bridge for Actual Budget
+type: application
+version: 0.1.0
