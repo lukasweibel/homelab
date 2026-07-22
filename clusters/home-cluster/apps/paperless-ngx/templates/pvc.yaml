@@ -1,0 +1,20 @@
+{{- range $name, $cfg := .Values.persistence }}
+{{- if kindIs "map" $cfg }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "paperless-ngx.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "paperless-ngx.labels" $ | nindent 4 }}
+spec:
+  accessModes:
+    - {{ $.Values.persistence.accessMode }}
+  {{- if $.Values.persistence.storageClass }}
+  storageClassName: {{ $.Values.persistence.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ $cfg.size }}
+{{- end }}
+{{- end }}

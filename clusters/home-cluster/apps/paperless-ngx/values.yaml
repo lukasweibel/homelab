@@ -1,0 +1,75 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/paperless-ngx/paperless-ngx
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+redis:
+  image:
+    repository: redis
+    tag: "7-alpine"
+    pullPolicy: IfNotPresent
+  port: 6379
+
+nameOverride: ""
+fullnameOverride: ""
+
+existingSecret: paperless-secrets
+
+env:
+  PAPERLESS_URL: "https://paperless.local.lan"
+  PAPERLESS_CSRF_TRUSTED_ORIGINS: "https://paperless.local.lan"
+  PAPERLESS_TIME_ZONE: "Europe/Zurich"
+  PAPERLESS_OCR_LANGUAGE: "deu+eng"
+  PAPERLESS_OCR_LANGUAGES: "deu"
+  PAPERLESS_TASK_WORKERS: "1"
+  PAPERLESS_THREADS_PER_WORKER: "1"
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: paperless.local.lan
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - paperless.local.lan
+
+persistence:
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  data:
+    size: 1Gi
+  media:
+    size: 20Gi
+  export:
+    size: 2Gi
+  consume:
+    size: 1Gi
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+redisResources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi

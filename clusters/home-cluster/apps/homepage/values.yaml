@@ -99,6 +99,11 @@ config:
               href: https://budget.local.lan/
               description: Personal Budgeting
               icon: actual-budget
+      - Documents:
+          - "Paperless-ngx":
+              href: https://paperless.local.lan/
+              description: Document Management
+              icon: paperless-ngx
       - Security:
           - "Authentik":
               href: https://auth.local.lan/
