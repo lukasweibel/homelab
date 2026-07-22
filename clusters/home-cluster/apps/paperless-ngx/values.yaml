@@ -23,7 +23,8 @@ env:
   PAPERLESS_TIME_ZONE: "Europe/Zurich"
   PAPERLESS_OCR_LANGUAGE: "deu+eng"
   PAPERLESS_OCR_LANGUAGES: "deu"
-  PAPERLESS_TASK_WORKERS: "1"
+  PAPERLESS_WEBSERVER_WORKERS: "2"
+  PAPERLESS_TASK_WORKERS: "2"
   PAPERLESS_THREADS_PER_WORKER: "1"
 
 service:
@@ -60,11 +61,11 @@ persistence:
 
 resources:
   limits:
-    cpu: "1"
-    memory: 1Gi
+    cpu: "2"
+    memory: 2Gi
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 500m
+    memory: 1Gi
 
 redisResources:
   limits:
