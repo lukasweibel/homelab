@@ -31,3 +31,17 @@ jobs:
 
       - name: Deploy services
         run: bash scripts/deploy-host.sh rpi-02
+
+  apply-rpi-03:
+    needs: apply-rpi-02
+    runs-on: [self-hosted, rpi-03]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System info
+        run: |
+          echo "Hostname: $(hostname)"
+          echo "Arch:     $(uname -m)"
+
+      - name: Deploy services
+        run: bash scripts/deploy-host.sh rpi-03
