@@ -5,7 +5,6 @@ packages:
   - curl
   - open-iscsi
 services:
-  - docker
   - open-iscsi
 tools:
   kubeseal: "0.24.0"
