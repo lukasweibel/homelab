@@ -15,6 +15,8 @@ spec:
           defaultClass: false
         defaultSettings:
           defaultDataPath: /var/lib/longhorn
+        preUpgradeChecker:
+          jobEnabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
