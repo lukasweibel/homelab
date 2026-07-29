@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - storageclass-replicated.yaml
+  - storageclass-single.yaml
+  - node-main-node-tag.yaml
+  - ingress.yaml

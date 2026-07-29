@@ -89,6 +89,10 @@ config:
               href: http://argo.local.lan/
               description: UI ArgoCD
               icon: argo-cd
+          - "Longhorn":
+              href: https://longhorn.local.lan/
+              description: Distributed Storage
+              icon: longhorn
       - Automation:
           - "n8n":
               href: http://n8n.local.lan/

@@ -3,8 +3,10 @@ runner_label: rpi-02
 packages:
   - git
   - curl
+  - open-iscsi
 services:
   - docker
+  - open-iscsi
 tools:
   kubeseal: "0.24.0"
   kubectl: "1.32.0"

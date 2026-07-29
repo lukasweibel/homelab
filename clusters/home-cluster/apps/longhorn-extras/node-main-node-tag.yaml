@@ -1,0 +1,8 @@
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  name: main-node
+  namespace: longhorn-system
+spec:
+  tags:
+    - big-disk
