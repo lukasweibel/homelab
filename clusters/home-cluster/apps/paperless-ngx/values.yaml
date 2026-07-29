@@ -48,16 +48,20 @@ ingress:
         - paperless.local.lan
 
 persistence:
-  storageClass: ""
+  storageClass: "longhorn-replicated"
   accessMode: ReadWriteOnce
   data:
     size: 1Gi
+    volumeName: pvc-cfd22e58-13bb-4827-918d-14ea3f4648f4
   media:
     size: 20Gi
+    volumeName: pvc-a560d5ec-fe3e-4a5a-a0a2-03a4e71cf60c
   export:
     size: 2Gi
+    volumeName: pvc-175038b1-1ff0-4f77-bbc8-8c80472baa88
   consume:
     size: 1Gi
+    volumeName: pvc-0f3f8b4b-7465-4fc6-8d66-3f9420073321
 
 resources:
   limits:

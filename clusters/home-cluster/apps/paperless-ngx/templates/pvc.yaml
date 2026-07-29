@@ -13,6 +13,9 @@ spec:
   {{- if $.Values.persistence.storageClass }}
   storageClassName: {{ $.Values.persistence.storageClass | quote }}
   {{- end }}
+  {{- if $cfg.volumeName }}
+  volumeName: {{ $cfg.volumeName }}
+  {{- end }}
   resources:
     requests:
       storage: {{ $cfg.size }}
