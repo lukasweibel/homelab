@@ -43,9 +43,23 @@ rpi-01 ist nicht Teil des k3s-Clusters und bleibt reiner Docker-Host — kein Th
 
 Damit: 3 Kopien (Longhorn/NVMe, USB-SSD, B2), 2 Medien (NVMe + USB), 1 offsite (B2).
 
+## PVC-Migrationspfad (local-path → longhorn-replicated)
+
+Am Beispiel paperless-ngx erprobt, gilt als Vorlage für actual-budget, n8n, authentik-db:
+
+1. App in **Git** auf `replicaCount: 0` setzen (nicht per `kubectl scale`!) — sonst holt ArgoCDs `selfHeal` die App innert Sekunden bis Minuten zurück und lässt bei Bedarf sogar neue, leere PVCs entstehen, weil das alte Deployment/StorageClass ja noch im Repo steht. Das kostete uns bei paperless-ngx eine Runde Datenverlust-Schreck (zum Glück nur Testdaten).
+2. Neue PVCs auf `longhorn-replicated` anlegen, per Helper-Pod (`rsync`) die Daten von alt (local-path) nach neu kopieren, Dateizahl/-grösse gegenchecken.
+3. Alte PVCs löschen; neue (temporäre) PVCs ebenfalls löschen — dank `reclaimPolicy: Retain` bleibt das darunterliegende Longhorn-PV als `Released` erhalten.
+4. `claimRef` auf dem retained PV leeren → PV wird wieder `Available`.
+5. **Im Chart** (nicht imperativ!) ein optionales `volumeName` pro PVC-Eintrag ergänzen (siehe `paperless-ngx/templates/pvc.yaml` + `values.yaml`), das explizit auf das jeweilige retained PV zeigt. ArgoCD legt die finalen PVCs damit selbst an, GitOps bleibt Source of Truth — kein manuelles `kubectl apply` für Endzustände.
+6. `replicaCount` in Git zurück auf 1, App verifizieren.
+
+Ergebnis: Pod kann danach auf jedem Node hochkommen (bestätigt: paperless-ngx lief nach Migration auf `rpi-3` statt `main-node`), da die Daten dank Replikation auf beiden Nodes liegen.
+
 ## Offene TODOs
 
 - [x] Longhorn-Deployment + StorageClasses ins Repo (`clusters/home-cluster/argocd/apps/longhorn`, `clusters/home-cluster/apps/longhorn-extras`). Node-Tag `big-disk` auf `main-node` per Longhorn-`Node`-CR gesetzt, damit `longhorn-single` gezielt dorthin pinnt.
-- [ ] Bestehende PVCs (paperless-ngx, actual-budget, n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
+- [x] paperless-ngx PVCs von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
+- [ ] Verbleibende PVCs (actual-budget, n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
 - [ ] B2-Buckets anlegen, Longhorn-Backup-Target konfigurieren
 - [ ] rclone-Cronjob (raw sync) für Paperless-Originale + Actual-Budget-Datei nach B2 + USB-SSD
