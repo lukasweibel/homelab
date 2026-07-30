@@ -6,3 +6,4 @@ resources:
   - node-main-node-tag.yaml
   - ingress.yaml
   - backup-target.yaml
+  - recurringjob-daily-backup.yaml
