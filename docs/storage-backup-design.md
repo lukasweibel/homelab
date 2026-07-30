@@ -62,7 +62,7 @@ Ergebnis: Pod kann danach auf jedem Node hochkommen (bestätigt: paperless-ngx l
 - [x] Longhorn-Deployment + StorageClasses ins Repo (`clusters/home-cluster/argocd/apps/longhorn`, `clusters/home-cluster/apps/longhorn-extras`). Node-Tag `big-disk` auf `main-node` per Longhorn-`Node`-CR gesetzt, damit `longhorn-single` gezielt dorthin pinnt.
 - [x] paperless-ngx PVCs von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
 - [x] actual-budget PVC von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
-- [ ] Verbleibende PVCs (n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
+- [ ] **Priorität, unabhängig vom USB-Stick**: Verbleibende PVCs (n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren — beide aktuell unrepliziert und ohne jedes Backup. Bei Ausfall/Defekt von `main-node` sind n8n-Workflows und die Authentik-Postgres-DB (Login-System!) komplett weg.
 - [x] B2-Bucket (`longhorn-b164-backup`) angelegt, Longhorn-Backup-Target konfiguriert
 - [x] Longhorn `RecurringJob` `daily-backup` eingerichtet (täglich 04:00, Retention 7), alle bestehenden Volumes gelabelt, StorageClasses labeln neue Volumes automatisch
 - [x] rclone-Cronjob (raw sync) für Paperless-Originale nach B2 (`paperless-raw-backup`, Bucket `paperless-raw-backup`)
