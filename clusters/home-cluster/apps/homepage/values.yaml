@@ -26,6 +26,10 @@ ingress:
         - homepage.local.lan
 
 resources: {}
+
+env:
+  LOG_LEVEL: debug
+
 nodeSelector: {}
 tolerations: []
 affinity: {}
