@@ -86,7 +86,7 @@ config:
               icon: grafana
       - Automation:
           - "n8n":
-              href: http://n8n.local.lan/
+              href: https://n8n.b164.dev/
               description: Workflow Automation
               icon: n8n
       - Finance:
