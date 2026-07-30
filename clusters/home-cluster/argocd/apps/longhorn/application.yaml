@@ -15,8 +15,6 @@ spec:
           defaultClass: false
         defaultSettings:
           defaultDataPath: /var/lib/longhorn
-          backupTarget: s3://longhorn-b164-backup@eu-central-003/
-          backupTargetCredentialSecret: longhorn-b2-backup-secret
         preUpgradeChecker:
           jobEnabled: false
   destination:

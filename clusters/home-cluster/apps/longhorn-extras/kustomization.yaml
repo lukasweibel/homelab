@@ -5,3 +5,4 @@ resources:
   - storageclass-single.yaml
   - node-main-node-tag.yaml
   - ingress.yaml
+  - backup-target.yaml
