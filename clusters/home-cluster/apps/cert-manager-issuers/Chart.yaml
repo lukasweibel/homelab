@@ -1,0 +1,5 @@
+apiVersion: v2
+name: cert-manager-issuers
+description: ClusterIssuer(s) for cert-manager (Let's Encrypt via Cloudflare DNS-01)
+type: application
+version: 0.1.0

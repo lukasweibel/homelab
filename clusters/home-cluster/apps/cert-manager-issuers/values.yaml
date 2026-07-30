@@ -1,0 +1,5 @@
+acmeEmail: "lukasweibel@gmx.ch"
+
+cloudflare:
+  secretName: cloudflare-api-token
+  secretKey: api-token

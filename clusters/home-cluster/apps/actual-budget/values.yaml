@@ -20,14 +20,16 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/router.middlewares: actual-budget-actual-budget-headers@kubernetescrd
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
   hosts:
-    - host: budget.local.lan
+    - host: budget.b164.dev
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        - budget.local.lan
+        - budget.b164.dev
+      secretName: budget-b164-dev-tls
 
 persistence:
   enabled: true

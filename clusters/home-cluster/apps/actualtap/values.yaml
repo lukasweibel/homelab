@@ -19,14 +19,16 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
   hosts:
-    - host: actualtap.local.lan
+    - host: actualtap.b164.dev
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        - actualtap.local.lan
+        - actualtap.b164.dev
+      secretName: actualtap-b164-dev-tls
 
 envFrom:
   - secretRef:

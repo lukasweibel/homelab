@@ -18,8 +18,8 @@ fullnameOverride: ""
 existingSecret: paperless-secrets
 
 env:
-  PAPERLESS_URL: "https://paperless.local.lan"
-  PAPERLESS_CSRF_TRUSTED_ORIGINS: "https://paperless.local.lan"
+  PAPERLESS_URL: "https://paperless.b164.dev"
+  PAPERLESS_CSRF_TRUSTED_ORIGINS: "https://paperless.b164.dev"
   PAPERLESS_PROXY_SSL_HEADER: '["HTTP_X_FORWARDED_PROTO", "https"]'
   PAPERLESS_USE_X_FORWARD_HOST: "true"
   PAPERLESS_USE_X_FORWARD_PORT: "true"
@@ -42,14 +42,16 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
   hosts:
-    - host: paperless.local.lan
+    - host: paperless.b164.dev
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        - paperless.local.lan
+        - paperless.b164.dev
+      secretName: paperless-b164-dev-tls
 
 persistence:
   storageClass: "longhorn-replicated"

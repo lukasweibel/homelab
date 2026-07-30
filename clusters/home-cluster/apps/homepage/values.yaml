@@ -16,14 +16,16 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
   hosts:
-    - host: homepage.local.lan
+    - host: homepage.b164.dev
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        - homepage.local.lan
+        - homepage.b164.dev
+      secretName: homepage-b164-dev-tls
 
 resources: {}
 
@@ -89,12 +91,12 @@ config:
               icon: n8n
       - Finance:
           - "Actual Budget":
-              href: https://budget.local.lan/
+              href: https://budget.b164.dev/
               description: Personal Budgeting
               icon: actual-budget
       - Documents:
           - "Paperless-ngx":
-              href: https://paperless.local.lan/
+              href: https://paperless.b164.dev/
               description: Document Management
               icon: paperless-ngx
       - Security:
