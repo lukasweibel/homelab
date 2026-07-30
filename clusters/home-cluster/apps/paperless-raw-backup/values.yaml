@@ -10,8 +10,8 @@ image:
 
 existingSecret: paperless-raw-backup-secrets
 
-# B2 bucket + optional path prefix, e.g. "b2:paperless-backup-raw/documents"
-remote: "b2:paperless-backup-raw/documents"
+# B2 bucket + optional path prefix, e.g. "b2:paperless-raw-backup/documents"
+remote: "b2:paperless-raw-backup/documents"
 
 source:
   pvcClaimName: paperless-ngx-media
