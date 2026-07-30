@@ -1,0 +1,35 @@
+nameOverride: ""
+fullnameOverride: ""
+
+schedule: "0 3 * * *"
+
+image:
+  repository: rclone/rclone
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+existingSecret: actualbudget-raw-backup-secrets
+
+# B2 bucket, e.g. "b2:actualbudget-raw-backup"
+remote: "b2:actualbudget-raw-backup"
+
+source:
+  pvcClaimName: actual-budget-data
+  mountPath: /source
+  # Whole data dir: sqlite budget file (server-files) + attachments (user-files).
+  syncPath: /source
+
+extraArgs:
+  - "--fast-list"
+
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 3
+failedJobsHistoryLimit: 3
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

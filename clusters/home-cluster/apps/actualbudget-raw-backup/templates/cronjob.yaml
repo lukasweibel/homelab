@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "actualbudget-raw-backup.fullname" . }}
+  labels:
+    {{- include "actualbudget-raw-backup.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            {{- include "actualbudget-raw-backup.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: rclone-sync
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              args:
+                - "sync"
+                - {{ .Values.source.syncPath | quote }}
+                - {{ .Values.remote | quote }}
+                {{- range .Values.extraArgs }}
+                - {{ . | quote }}
+                {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ .Values.existingSecret }}
+              volumeMounts:
+                - name: source
+                  mountPath: {{ .Values.source.mountPath }}
+                  readOnly: true
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          volumes:
+            - name: source
+              persistentVolumeClaim:
+                claimName: {{ .Values.source.pvcClaimName }}
+                readOnly: true
