@@ -69,7 +69,7 @@ config:
     services.yaml: |
       - Cluster:
           - "k3s Dashboard":
-              href: https://k3s.local.lan/
+              href: https://k3s.b164.dev/
               description: UI for k3s
               icon: kubernetes
           - "ArgoCD":
@@ -77,11 +77,11 @@ config:
               description: UI ArgoCD
               icon: argo-cd
           - "Longhorn":
-              href: https://longhorn.local.lan/
+              href: https://longhorn.b164.dev/
               description: Distributed Storage
               icon: longhorn
           - "Grafana":
-              href: https://grafana.local.lan/
+              href: https://grafana.b164.dev/
               description: Monitoring & Dashboards
               icon: grafana
       - Automation:
@@ -101,7 +101,7 @@ config:
               icon: paperless-ngx
       - Security:
           - "Authentik":
-              href: https://auth.local.lan/
+              href: https://auth.b164.dev/
               description: SSO Identity Provider
               icon: authentik
       - Networking:

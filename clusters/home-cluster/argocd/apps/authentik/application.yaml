@@ -41,8 +41,13 @@ spec:
             annotations:
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               traefik.ingress.kubernetes.io/router.tls: "true"
+              cert-manager.io/cluster-issuer: letsencrypt-cloudflare
             hosts:
-              - auth.local.lan
+              - auth.b164.dev
+            tls:
+              - hosts:
+                  - auth.b164.dev
+                secretName: auth-b164-dev-tls
   destination:
     server: https://kubernetes.default.svc
     namespace: authentik

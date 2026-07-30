@@ -73,11 +73,13 @@ spec:
             annotations:
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               traefik.ingress.kubernetes.io/router.tls: "true"
+              cert-manager.io/cluster-issuer: letsencrypt-cloudflare
             hosts:
-              - grafana.local.lan
+              - grafana.b164.dev
             tls:
               - hosts:
-                  - grafana.local.lan
+                  - grafana.b164.dev
+                secretName: grafana-b164-dev-tls
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

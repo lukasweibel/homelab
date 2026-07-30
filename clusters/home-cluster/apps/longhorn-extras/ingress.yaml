@@ -6,12 +6,14 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
 spec:
   tls:
     - hosts:
-        - longhorn.local.lan
+        - longhorn.b164.dev
+      secretName: longhorn-b164-dev-tls
   rules:
-    - host: longhorn.local.lan
+    - host: longhorn.b164.dev
       http:
         paths:
           - path: /
