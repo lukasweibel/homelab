@@ -60,6 +60,9 @@ Ergebnis: Pod kann danach auf jedem Node hochkommen (bestätigt: paperless-ngx l
 
 - [x] Longhorn-Deployment + StorageClasses ins Repo (`clusters/home-cluster/argocd/apps/longhorn`, `clusters/home-cluster/apps/longhorn-extras`). Node-Tag `big-disk` auf `main-node` per Longhorn-`Node`-CR gesetzt, damit `longhorn-single` gezielt dorthin pinnt.
 - [x] paperless-ngx PVCs von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
-- [ ] Verbleibende PVCs (actual-budget, n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
+- [x] actual-budget PVC von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
+- [ ] Verbleibende PVCs (n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
 - [ ] B2-Buckets anlegen, Longhorn-Backup-Target konfigurieren
-- [ ] rclone-Cronjob (raw sync) für Paperless-Originale + Actual-Budget-Datei nach B2 + USB-SSD
+- [x] rclone-Cronjob (raw sync) für Paperless-Originale nach B2 (`paperless-raw-backup`, Bucket `paperless-raw-backup`)
+- [ ] rclone-Cronjob (raw sync) für Actual-Budget-Datei nach B2
+- [ ] Lokale Kopie auf USB-SSD (Ebene 3)
