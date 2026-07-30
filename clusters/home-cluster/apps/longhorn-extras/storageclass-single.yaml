@@ -10,3 +10,4 @@ parameters:
   numberOfReplicas: "1"
   staleReplicaTimeout: "30"
   nodeSelector: "big-disk"
+  recurringJobSelector: '[{"name":"daily-backup","isGroup":true}]'

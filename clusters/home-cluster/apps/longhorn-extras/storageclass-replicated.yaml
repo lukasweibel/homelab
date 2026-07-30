@@ -9,3 +9,4 @@ volumeBindingMode: Immediate
 parameters:
   numberOfReplicas: "2"
   staleReplicaTimeout: "30"
+  recurringJobSelector: '[{"name":"daily-backup","isGroup":true}]'
