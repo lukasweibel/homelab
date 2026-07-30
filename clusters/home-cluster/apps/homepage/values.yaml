@@ -27,8 +27,7 @@ ingress:
 
 resources: {}
 
-env:
-  LOG_LEVEL: debug
+env: {}
 
 nodeSelector: {}
 tolerations: []
@@ -55,24 +54,6 @@ config:
       headerStyle: clean
 
     widgets.yaml: |
-      - resources:
-          cpu: true
-          memory: true
-          cputype: true
-          disk: /
-          uptime: true
-      - kubernetes:
-          cluster:
-            show: true
-            cpu: true
-            memory: true
-            showLabel: true
-            label: "cluster"
-          nodes:
-            show: true
-            cpu: true
-            memory: true
-            showLabel: true
       - openmeteo:
           label: Winterthur
           latitude: 47.5024
@@ -97,6 +78,10 @@ config:
               href: https://longhorn.local.lan/
               description: Distributed Storage
               icon: longhorn
+          - "Grafana":
+              href: https://grafana.local.lan/
+              description: Monitoring & Dashboards
+              icon: grafana
       - Automation:
           - "n8n":
               href: http://n8n.local.lan/
