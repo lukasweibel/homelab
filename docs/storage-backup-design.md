@@ -29,7 +29,8 @@ rpi-01 ist nicht Teil des k3s-Clusters und bleibt reiner Docker-Host — kein Th
 
 1. **Longhorn native Backup → Backblaze B2 (Bucket `longhorn-b164-backup`, S3-kompatibel)**
    Block-basiert, inkrementell, läuft direkt aus Longhorn. Für vollständige Disaster-Recovery des gesamten Cluster-/App-Zustands. Nicht menschenlesbar — Restore erfordert einen laufenden Longhorn/k3s.
-   Konfiguriert über `defaultSettings.backupTarget`/`backupTargetCredentialSecret` im Longhorn-Helm-Values (`clusters/home-cluster/argocd/apps/longhorn/application.yaml`), Credentials als Sealed Secret `longhorn-b2-backup-secret` (Namespace `longhorn-system`). Noch offen: konkrete `RecurringJob`s (Schedule/Retention) für die einzelnen Volumes.
+   Konfiguriert über die `BackupTarget`-CRD `default` (**nicht** über `defaultSettings` im Helm-Chart — die seeden Settings nur beim allerersten Install, wirken auf einer laufenden Instanz nicht rückwirkend), siehe `apps/longhorn-extras/backup-target.yaml`. Credentials als Sealed Secret `longhorn-b2-backup-secret` (Namespace `longhorn-system`).
+   Automatischer Zeitplan über `RecurringJob` `daily-backup` (`apps/longhorn-extras/recurringjob-daily-backup.yaml`): täglich 04:00 Uhr, `task: backup`, Retention 7 Generationen. Volumes hängen sich über das Label `recurring-job-group.longhorn.io/daily-backup=enabled` an; beide StorageClasses (`longhorn-replicated`, `longhorn-single`) haben dafür `recurringJobSelector` gesetzt, sodass neue Volumes automatisch gelabelt werden. Bereits bestehende Volumes wurden einmalig manuell gelabelt (Longhorn-`Volume`-Objekte sind Laufzeit-State mit dynamischen Namen, kein GitOps-Ziel).
 
 2. **Rohdateien-Sync via rclone-CronJobs → Backblaze B2 (je App ein eigener Bucket + Application Key)**
    Echte, einzeln abrufbare Dateien, direkt über das B2-Web-Interface (auch vom Handy) einseh- und herunterladbar, ganz ohne Cluster/Longhorn. Ersetzt die ursprünglich angedachte iCloud-Lösung (kein offizieller iCloud-Client für Linux verfügbar / unzuverlässig).
@@ -63,7 +64,7 @@ Ergebnis: Pod kann danach auf jedem Node hochkommen (bestätigt: paperless-ngx l
 - [x] actual-budget PVC von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
 - [ ] Verbleibende PVCs (n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
 - [x] B2-Bucket (`longhorn-b164-backup`) angelegt, Longhorn-Backup-Target konfiguriert
-- [ ] Longhorn `RecurringJob`s (Schedule/Retention) für die Backups einrichten — Target ist konfiguriert, aber es laufen noch keine automatischen Backups
+- [x] Longhorn `RecurringJob` `daily-backup` eingerichtet (täglich 04:00, Retention 7), alle bestehenden Volumes gelabelt, StorageClasses labeln neue Volumes automatisch
 - [x] rclone-Cronjob (raw sync) für Paperless-Originale nach B2 (`paperless-raw-backup`, Bucket `paperless-raw-backup`)
 - [x] rclone-Cronjob (raw sync) für Actual-Budget-Datei nach B2 (`actualbudget-raw-backup`, Bucket `actualbudget-raw-backup`)
 - [ ] Lokale Kopie auf USB-SSD (Ebene 3)
