@@ -32,7 +32,8 @@ ingress:
 persistence:
   enabled: true
   size: 1Gi
-  storageClass: ""
+  storageClass: "longhorn-replicated"
+  volumeName: pvc-53314cd0-d25a-4f63-9947-8483865917a4
   accessMode: ReadWriteOnce
 
 resources:
