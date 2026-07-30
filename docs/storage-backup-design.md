@@ -1,6 +1,6 @@
 # Storage & Backup Design
 
-Status: Entwurf / noch nicht umgesetzt. Dient als Referenz für die Umsetzung, sobald der zweite k3s-Node (rpi-03) dazukommt.
+Status: Grösstenteils umgesetzt (Longhorn, PVC-Migration paperless-ngx/actual-budget, rclone-Raw-Backups, Longhorn-Backup-Target) — siehe TODOs am Ende für den Rest.
 
 ## Ausgangslage
 
@@ -27,16 +27,16 @@ rpi-01 ist nicht Teil des k3s-Clusters und bleibt reiner Docker-Host — kein Th
 
 ## Backup-Ebenen (3-2-1-Prinzip)
 
-1. **Longhorn native Backup → Backblaze B2 (Bucket `homelab-longhorn-backup`)**
+1. **Longhorn native Backup → Backblaze B2 (Bucket `longhorn-b164-backup`, S3-kompatibel)**
    Block-basiert, inkrementell, läuft direkt aus Longhorn. Für vollständige Disaster-Recovery des gesamten Cluster-/App-Zustands. Nicht menschenlesbar — Restore erfordert einen laufenden Longhorn/k3s.
+   Konfiguriert über `defaultSettings.backupTarget`/`backupTargetCredentialSecret` im Longhorn-Helm-Values (`clusters/home-cluster/argocd/apps/longhorn/application.yaml`), Credentials als Sealed Secret `longhorn-b2-backup-secret` (Namespace `longhorn-system`). Noch offen: konkrete `RecurringJob`s (Schedule/Retention) für die einzelnen Volumes.
 
-2. **Rohdateien-Sync via rclone → Backblaze B2 (Bucket `homelab-raw-archive`)**
-   Echte, einzeln abrufbare Dateien:
-   - Paperless: `media/documents/originals/`
-   - Actual Budget: Budget-Datei
-   Direkt über das B2-Web-Interface (auch vom Handy) einseh- und herunterladbar, ganz ohne Cluster/Longhorn. Ersetzt die ursprünglich angedachte iCloud-Lösung (kein offizieller iCloud-Client für Linux verfügbar / unzuverlässig).
-   Cadence: täglich (Deltas sind klein).
-   Optional: Versionierung auf dem Bucket aktivieren, falls in Paperless versehentlich etwas gelöscht/überschrieben wird.
+2. **Rohdateien-Sync via rclone-CronJobs → Backblaze B2 (je App ein eigener Bucket + Application Key)**
+   Echte, einzeln abrufbare Dateien, direkt über das B2-Web-Interface (auch vom Handy) einseh- und herunterladbar, ganz ohne Cluster/Longhorn. Ersetzt die ursprünglich angedachte iCloud-Lösung (kein offizieller iCloud-Client für Linux verfügbar / unzuverlässig).
+   - **Paperless** (`apps/paperless-raw-backup`): `media/documents/originals/` → Bucket `paperless-raw-backup`. `PAPERLESS_FILENAME_FORMAT` auf `{{ created_year }}/{{ correspondent }}/{{ title }}` gesetzt, damit die Ablage im Bucket durchsuchbar/browsbar bleibt statt flacher IDs.
+   - **Actual Budget** (`apps/actualbudget-raw-backup`): kompletter `/data`-Ordner (SQLite-Budgetdatei + Anhänge) → Bucket `actualbudget-raw-backup`.
+   Beide laufen als tägliche `CronJob`s (`rclone sync`, Schedule `0 3 * * *`), mounten die jeweilige PVC read-only. Restore ist trivial und unabhängig von k3s: Bucket-Inhalt herunterladen und z.B. `docker run -v ./data:/data actualbudget/actual-server` (bzw. die Original-Dateien direkt öffnen) — kein Kubernetes nötig.
+   Versionierung ("Keep All Versions") auf beiden Buckets aktiviert, falls in einer App versehentlich etwas gelöscht/überschrieben wird.
 
 3. **Lokale Kopie auf USB-SSD (am Storage-Node)**
    Gleicher Rohdateien-Satz wie Ebene 2, zusätzlich lokal auf einer USB-SSD (kein einfacher Flash-Stick — Schreibzyklen-Verschleiss). Schneller Zugriff ohne Internet-Abhängigkeit bei kleineren Störungen (versehentliches Löschen, kaputtes Upgrade). Schützt **nicht** vor Totalverlust des Standorts (Brand, Diebstahl) — dafür ist B2 da.
@@ -62,7 +62,8 @@ Ergebnis: Pod kann danach auf jedem Node hochkommen (bestätigt: paperless-ngx l
 - [x] paperless-ngx PVCs von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
 - [x] actual-budget PVC von `local-path` auf `longhorn-replicated` migriert (siehe Migrationspfad oben)
 - [ ] Verbleibende PVCs (n8n, authentik-db) von `local-path` auf `longhorn-replicated` migrieren
-- [ ] B2-Buckets anlegen, Longhorn-Backup-Target konfigurieren
+- [x] B2-Bucket (`longhorn-b164-backup`) angelegt, Longhorn-Backup-Target konfiguriert
+- [ ] Longhorn `RecurringJob`s (Schedule/Retention) für die Backups einrichten — Target ist konfiguriert, aber es laufen noch keine automatischen Backups
 - [x] rclone-Cronjob (raw sync) für Paperless-Originale nach B2 (`paperless-raw-backup`, Bucket `paperless-raw-backup`)
-- [ ] rclone-Cronjob (raw sync) für Actual-Budget-Datei nach B2
+- [x] rclone-Cronjob (raw sync) für Actual-Budget-Datei nach B2 (`actualbudget-raw-backup`, Bucket `actualbudget-raw-backup`)
 - [ ] Lokale Kopie auf USB-SSD (Ebene 3)
