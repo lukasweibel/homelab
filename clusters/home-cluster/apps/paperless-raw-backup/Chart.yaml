@@ -1,0 +1,5 @@
+apiVersion: v2
+name: paperless-raw-backup
+description: Daily rclone sync of Paperless originals to Backblaze B2
+type: application
+version: 0.1.0

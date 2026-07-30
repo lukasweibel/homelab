@@ -1,0 +1,35 @@
+nameOverride: ""
+fullnameOverride: ""
+
+schedule: "0 3 * * *"
+
+image:
+  repository: rclone/rclone
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+existingSecret: paperless-raw-backup-secrets
+
+# B2 bucket + optional path prefix, e.g. "b2:paperless-backup-raw/documents"
+remote: "b2:paperless-backup-raw/documents"
+
+source:
+  pvcClaimName: paperless-ngx-media
+  mountPath: /source
+  # Only the human-readable originals - archive/thumbnails are regenerable from these.
+  syncPath: /source/documents/originals
+
+extraArgs:
+  - "--fast-list"
+
+concurrencyPolicy: Forbid
+successfulJobsHistoryLimit: 3
+failedJobsHistoryLimit: 3
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
