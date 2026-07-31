@@ -73,7 +73,7 @@ config:
               description: UI for k3s
               icon: kubernetes
           - "ArgoCD":
-              href: http://argo.local.lan/
+              href: https://argo.b164.dev/
               description: UI ArgoCD
               icon: argo-cd
           - "Longhorn":
