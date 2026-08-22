@@ -1,0 +1,54 @@
+replicaCount: 1
+
+image:
+  repository: freshrss/freshrss
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+existingSecret: freshrss-secrets
+
+env:
+  TZ: "Europe/Zurich"
+  CRON_MIN: "3,33"
+  FRESHRSS_INSTALL: "--api-enabled --base-url https://rss.b164.dev --db-type sqlite --default-user admin"
+  TRUSTED_PROXY: "10.42.0.0/16"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+  hosts:
+    - host: rss.b164.dev
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - rss.b164.dev
+      secretName: rss-b164-dev-tls
+
+persistence:
+  enabled: true
+  size: 2Gi
+  storageClass: "longhorn-replicated"
+  volumeName: ""
+  accessMode: ReadWriteOnce
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
