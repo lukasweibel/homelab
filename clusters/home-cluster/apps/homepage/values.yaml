@@ -104,6 +104,10 @@ config:
               href: https://rss.b164.dev/
               description: RSS Feed Reader
               icon: freshrss
+      - Apps:
+          - "RCW Portal":
+              href: https://rcw-portal.b164.dev/
+              description: RCW Mitgliederportal
       - Security:
           - "Authentik":
               href: https://auth.b164.dev/
