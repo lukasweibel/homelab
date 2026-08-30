@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: lukasweibel99/rcw-portal
+  tag: "latest"
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+  hosts:
+    - host: rcw-portal.b164.dev
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - rcw-portal.b164.dev
+      secretName: rcw-portal-b164-dev-tls
+
+envFrom:
+  - secretRef:
+      name: rcw-portal-secrets
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
