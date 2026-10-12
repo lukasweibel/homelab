@@ -104,6 +104,11 @@ config:
               href: https://rss.b164.dev/
               description: RSS Feed Reader
               icon: freshrss
+      - AI:
+          - "Open WebUI":
+              href: https://chat.b164.dev/
+              description: LLM Chat Interface
+              icon: open-webui
       - Apps:
           - "RCW Portal":
               href: https://rcw-portal.b164.dev/

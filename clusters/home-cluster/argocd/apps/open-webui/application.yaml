@@ -1,0 +1,70 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-webui
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://helm.openwebui.com
+    chart: open-webui
+    targetRevision: 17.0.0
+    helm:
+      values: |
+        # Kein lokales Ollama/Pipelines/OpenAI - wir nutzen Ollama Cloud
+        ollama:
+          enabled: false
+
+        pipelines:
+          enabled: false
+
+        enableOpenaiApi: false
+
+        # Einzelne Replica -> eingebauter In-Memory Websocket-Manager statt Redis
+        websocket:
+          manager: ""
+          redis:
+            enabled: false
+
+        ollamaUrls:
+          - "https://ollama.com"
+
+        extraEnvVars:
+          - name: OLLAMA_API_CONFIGS
+            valueFrom:
+              secretKeyRef:
+                name: openwebui-secrets
+                key: OLLAMA_API_CONFIGS
+
+        persistence:
+          enabled: true
+          size: 2Gi
+          storageClass: longhorn-replicated
+
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+
+        ingress:
+          enabled: true
+          class: traefik
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.tls: "true"
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          host: chat.b164.dev
+          tls: true
+          existingSecret: chat-b164-dev-tls
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: open-webui
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
