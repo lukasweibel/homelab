@@ -35,6 +35,11 @@ spec:
               secretKeyRef:
                 name: openwebui-secrets
                 key: OLLAMA_API_CONFIGS
+          - name: WEBUI_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: openwebui-secrets
+                key: WEBUI_SECRET_KEY
 
         persistence:
           enabled: true
