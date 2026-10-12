@@ -54,10 +54,6 @@ spec:
             cpu: 100m
             memory: 512Mi
 
-        # main-node war bei 79% Memory (OOMKilled bei 1Gi-Limit) - rpi-3 hat Luft
-        nodeSelector:
-          kubernetes.io/hostname: rpi-3
-
         ingress:
           enabled: true
           class: traefik
