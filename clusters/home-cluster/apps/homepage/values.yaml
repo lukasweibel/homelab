@@ -99,11 +99,6 @@ config:
               href: https://paperless.b164.dev/
               description: Document Management
               icon: paperless-ngx
-      - Reading:
-          - "FreshRSS":
-              href: https://rss.b164.dev/
-              description: RSS Feed Reader
-              icon: freshrss
       - AI:
           - "Open WebUI":
               href: https://chat.b164.dev/

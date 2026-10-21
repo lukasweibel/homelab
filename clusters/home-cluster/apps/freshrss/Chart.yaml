@@ -1,5 +1,0 @@
-apiVersion: v2
-name: freshrss
-description: FreshRSS - self-hosted RSS aggregator
-type: application
-version: 0.1.0
