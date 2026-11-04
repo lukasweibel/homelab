@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Zurich",
+  "schedule": ["before 6am on Monday"],
+  "separateMajorMinor": true,
+  "argocd": {
+    "managerFilePatterns": [
+      "/^clusters\\/home-cluster\\/argocd\\/apps\\/.*\\.yaml$/"
+    ]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^scripts\\/bootstrap-runner\\.sh$/"],
+      "matchStrings": ["RUNNER_VERSION=\\\"(?<currentValue>[^\\\"]+)\\\""],
+      "depNameTemplate": "actions/runner",
+      "packageNameTemplate": "actions/runner",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["argocd"],
+      "matchDatasources": ["git-tags"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["lukasweibel99/my-frontend"],
+      "pinDigests": true
+    }
+  ]
+}
