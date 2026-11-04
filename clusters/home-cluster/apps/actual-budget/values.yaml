@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: actualbudget/actual-server
-  tag: "latest"
+  tag: "26.11.0"
   pullPolicy: IfNotPresent
 
 nameOverride: ""

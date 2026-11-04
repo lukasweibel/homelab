@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: lukasweibel99/my-frontend
-  tag: "latest"
+  tag: "latest@sha256:0bc00f7c0a54106d6e4d43f739cebe1126645c363cfdd73835d791ad0c3a5ae6"
   pullPolicy: IfNotPresent
 
 nameOverride: ""

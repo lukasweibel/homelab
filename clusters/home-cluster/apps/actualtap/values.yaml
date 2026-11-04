@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/mattfaz/actualtap
-  tag: "latest"
+  tag: "v1.0.39"
   pullPolicy: IfNotPresent
 
 nameOverride: ""
