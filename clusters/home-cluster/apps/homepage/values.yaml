@@ -29,7 +29,8 @@ ingress:
 
 resources: {}
 
-env: {}
+env:
+  HOMEPAGE_ALLOWED_HOSTS: homepage.b164.dev
 
 nodeSelector: {}
 tolerations: []
