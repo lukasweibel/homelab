@@ -30,6 +30,10 @@ ingress:
         - rcw-portal.b164.dev
       secretName: rcw-portal-b164-dev-tls
 
+env:
+  - name: APP_URL
+    value: https://rcw-portal.b164.dev
+
 envFrom:
   - secretRef:
       name: rcw-portal-secrets
