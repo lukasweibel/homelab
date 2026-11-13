@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: lukasweibel99/rcw-portal
-  tag: "sha-9f52747b36983dfa158cd5da28ebb2e910dc732c"
+  tag: "sha-d91000720f284623e527daa4bc35e201b1d0c439"
   pullPolicy: Always
 
 nameOverride: ""
