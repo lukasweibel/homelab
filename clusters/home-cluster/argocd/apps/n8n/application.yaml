@@ -22,6 +22,7 @@ spec:
           WEBHOOK_URL: "https://n8n.b164.dev/"
 
         main:
+          count: 0
           persistence:
             enabled: true
             size: 2Gi
