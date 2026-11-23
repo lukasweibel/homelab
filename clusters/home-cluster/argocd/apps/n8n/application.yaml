@@ -20,9 +20,17 @@ spec:
           N8N_PROTOCOL: "https"
           N8N_SECURE_COOKIE: "true"
           WEBHOOK_URL: "https://n8n.b164.dev/"
+          EXECUTIONS_DATA_PRUNE: "true"
+          EXECUTIONS_DATA_MAX_AGE: "168"
+          EXECUTIONS_DATA_PRUNE_MAX_COUNT: "10000"
 
         main:
-          count: 0
+          count: 1
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 1536Mi
           persistence:
             enabled: true
             size: 2Gi
