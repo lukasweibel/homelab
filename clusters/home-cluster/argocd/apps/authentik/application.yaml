@@ -34,7 +34,21 @@ spec:
         redis:
           enabled: false
 
+        worker:
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 100m
+            limits:
+              memory: 1Gi
+
         server:
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 100m
+            limits:
+              memory: 1Gi
           ingress:
             enabled: true
             ingressClassName: traefik
