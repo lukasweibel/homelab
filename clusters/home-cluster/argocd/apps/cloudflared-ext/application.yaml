@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared-ext
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/lukasweibel/homelab.git
+    targetRevision: main
+    path: clusters/home-cluster/apps/cloudflared
+    helm:
+      releaseName: cloudflared-ext
+      valueFiles:
+        - values.yaml
+        - values-ext.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cloudflared-ext
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        zone: ext
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true

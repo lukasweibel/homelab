@@ -9,6 +9,18 @@ tunnel:
   secretName: cloudflared-token
   secretKey: token
 
+automountServiceAccountToken: true
+podSecurityContext: {}
+securityContext: {}
+
+# Egress Isolation fuer Tunnel, deren Konfiguration nicht von uns kontrolliert wird
+networkPolicy:
+  enabled: false
+  target:
+    namespace: ""
+    podLabels: {}
+    port: 0
+
 resources:
   limits:
     cpu: 100m

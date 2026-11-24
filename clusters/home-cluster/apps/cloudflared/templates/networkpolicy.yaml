@@ -1,0 +1,68 @@
+{{- if .Values.networkPolicy.enabled }}
+# Default Deny fuer alle Pods im Namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cloudflared.fullname" . }}-default-deny
+  labels:
+    {{- include "cloudflared.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "cloudflared.fullname" . }}
+  labels:
+    {{- include "cloudflared.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "cloudflared.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    # DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # einziges erlaubtes Ziel im Cluster
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ required "networkPolicy.target.namespace" .Values.networkPolicy.target.namespace }}
+          podSelector:
+            matchLabels:
+              {{- toYaml (required "networkPolicy.target.podLabels" .Values.networkPolicy.target.podLabels) | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: {{ required "networkPolicy.target.port" .Values.networkPolicy.target.port }}
+    # Cloudflare Edge, keine privaten Netze (Pod, Service, LAN, Link Local)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.0.0/16
+              - 100.64.0.0/10
+      ports:
+        - protocol: TCP
+          port: 7844
+        - protocol: UDP
+          port: 7844
+{{- end }}
